@@ -1,3 +1,4 @@
+//reads a files and creates a duplicate txt file 
 import java.util.*;
 import java.lang.*;
 import java.io.*;
