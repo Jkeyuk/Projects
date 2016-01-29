@@ -1,4 +1,4 @@
-//reads a files and creates a duplicate txt file 
+//reads a files and creates a duplicate txt file  using print stream class
 import java.util.*;
 import java.lang.*;
 import java.io.*;
