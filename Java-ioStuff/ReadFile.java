@@ -6,10 +6,8 @@ import java.io.*;
 class ReaderObject{
     String fileName;
     
-
     ReaderObject(String st){
         this.fileName = st;
-        
     }
     
     void printToConsole() throws IOException
@@ -54,6 +52,5 @@ public class ReadFile{
         ReaderObject read = new ReaderObject(fileName);
         read.printToConsole();
         read.outPutToTextFile();
-
      }
 }
