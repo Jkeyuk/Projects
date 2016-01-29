@@ -6,11 +6,11 @@ import java.io.*;
 class ReaderObject{
     String fileName;
     
-    ReaderObject(String st){
+    ReaderObject(String st){ //constructor
         this.fileName = st;
     }
     
-    void printToConsole() throws IOException
+    void printToConsole() throws IOException //method to print to console
     {
         String data;
         File fileToPrint = new File(fileName);
