@@ -6,11 +6,13 @@ import java.io.*;
 class ReaderObject{
     String fileName;
     
-    ReaderObject(String st){ //constructor
+
+    ReaderObject(String st){
         this.fileName = st;
+        
     }
     
-    void printToConsole() throws IOException //method to print to console
+    void printToConsole() throws IOException
     {
         String data;
         File fileToPrint = new File(fileName);
@@ -21,6 +23,21 @@ class ReaderObject{
             data = scan.nextLine(); //enter line into data
             System.out.println(data);//print data
         }
+    }
+    void outPutToTextFile() throws IOException
+    {
+        String data;
+        File fileToRead = new File(fileName);
+        Scanner scan = new Scanner(fileToRead);
+        File output = new File("output.txt");
+        PrintStream print = new PrintStream(output); 
+        
+         while(scan.hasNextLine())  //loop while there is something to read
+        {
+            data = scan.nextLine(); //enter line into data
+            print.println(data);//print data
+        }
+        print.close();
     }
 }
 
@@ -36,6 +53,7 @@ public class ReadFile{
      
         ReaderObject read = new ReaderObject(fileName);
         read.printToConsole();
+        read.outPutToTextFile();
 
      }
 }
