@@ -62,7 +62,7 @@ class EchoServer{
     }
 }
 
-public class test {
+public class simpleServer {
     
     public static void main(String[] args) throws Exception {
         //create echo server object 
