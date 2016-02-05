@@ -58,7 +58,7 @@ class EchoServer{
     }
 }
 
-public class test {
+public class simpleServer {
     
     public static void main(String[] args) throws Exception {
         EchoServer testServer = new EchoServer("0.0.0.0",5000);
