@@ -1,53 +1,68 @@
-
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
-class Server{
+class EchoServer{
     private String ip = null;
     private int port;
     
-    public Server(String ip, int port) {
+    public EchoServer(String ip, int port) {
         this.ip = ip;
         this.port= port;
     }
     
     public void start() throws Exception {
-        
         ServerSocket serverSocket = new ServerSocket();
         serverSocket.bind(new InetSocketAddress(this.ip, this.port));
         
         Socket clientSocket = serverSocket.accept();
         
         serverResponse(clientSocket);
-        
     }
     
     private void serverResponse(Socket clientSocket) throws Exception  {
+        System.out.println("Connection Made" );
         
         PrintWriter response =
         new PrintWriter(clientSocket.getOutputStream(), true);
         BufferedReader request = new BufferedReader(
         new InputStreamReader(clientSocket.getInputStream()));
         
-        String data = null;
-        while((data = request.readLine()) != null){
-            if(data.length() == 0){
+        ArrayList<String> requestData = new ArrayList<>();
+        requestData = parseRequest(request);
+        
+        sendRequestDataBack(requestData, response);
+        
+        request.close();
+        response.close();
+        clientSocket.close();
+    }
+    
+    private ArrayList<String> parseRequest(BufferedReader request) throws Exception {
+        ArrayList<String> data = new ArrayList<>();
+        String line = null;
+        
+        while((line = request.readLine()) != null){
+            if(line.length() == 0){
                 break;
             }
-            response.println("<p>" + data + "</p>");
+            data.add(line);
         }
-        System.out.println("Connection made to: "+clientSocket.getInetAddress());
-        response.close();
-        request.close();
-        clientSocket.close();
+        return data;
+    }
+    
+    private void sendRequestDataBack(ArrayList<String> data, PrintWriter response){
+        for (String x : data ){
+            response.println("<p>" + x + "</p>");
+        }
     }
 }
 
-public class simpleServer {
+public class test {
     
     public static void main(String[] args) throws Exception {
-       Server testServer = new Server("0.0.0.0",5000);
-       testServer.start();
+        EchoServer testServer = new EchoServer("0.0.0.0",5000);
+        testServer.start();
     }
     
 }
