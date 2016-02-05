@@ -23,22 +23,17 @@ class EchoServer{
     private void serverResponse(Socket clientSocket) throws Exception  {
         System.out.println("Connection Made" );
         
-        PrintWriter response =
-        new PrintWriter(clientSocket.getOutputStream(), true);
-        BufferedReader request = new BufferedReader(
-        new InputStreamReader(clientSocket.getInputStream()));
-        
         ArrayList<String> requestData = new ArrayList<>();
-        requestData = parseRequest(request);
+        requestData = parseRequest(clientSocket);
         
-        sendRequestDataBack(requestData, response);
+        sendRequestDataBack(requestData, clientSocket);
         
-        request.close();
-        response.close();
         clientSocket.close();
     }
     
-    private ArrayList<String> parseRequest(BufferedReader request) throws Exception {
+    private ArrayList<String> parseRequest(Socket clientSocket) throws Exception {
+        BufferedReader request = new BufferedReader(
+        new InputStreamReader(clientSocket.getInputStream()));
         ArrayList<String> data = new ArrayList<>();
         String line = null;
         
@@ -51,14 +46,17 @@ class EchoServer{
         return data;
     }
     
-    private void sendRequestDataBack(ArrayList<String> data, PrintWriter response){
+    private void sendRequestDataBack(ArrayList<String> data, Socket clientSocket) throws Exception {
+        PrintWriter response =
+        new PrintWriter(clientSocket.getOutputStream(), true);
+        
         for (String x : data ){
             response.println("<p>" + x + "</p>");
         }
     }
 }
 
-public class simpleServer {
+public class test {
     
     public static void main(String[] args) throws Exception {
         EchoServer testServer = new EchoServer("0.0.0.0",5000);
