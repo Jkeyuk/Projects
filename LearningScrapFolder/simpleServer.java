@@ -9,7 +9,6 @@ class EchoServer {
 
     //constructor
     public EchoServer(int port) {
-
         this.port = port;
     }
 
@@ -17,7 +16,7 @@ class EchoServer {
     public void start() throws Exception {
         //create server socket
         ServerSocket serverSocket = new ServerSocket();
-        //bind server socket to given ip and port
+        //bind server socket to given port
         serverSocket.bind(new InetSocketAddress(this.port));
         //open socket and listen for requests
         Socket clientSocket = serverSocket.accept();
@@ -27,24 +26,22 @@ class EchoServer {
 
     //response from server
     private void serverResponse(Socket clientSocket) throws Exception {
-        System.out.println("Connection Made");
-        //create array list and fill with request data
-        ArrayList<String> requestData = new ArrayList<>();
-        requestData = parseRequest(clientSocket);
+        System.out.println("Connection Made");     
         //send request data back to client
-        sendRequestDataBack(requestData, clientSocket);
+        sendRequestDataBack( returnParsedRequest(clientSocket), clientSocket);
         //close socket
         clientSocket.close();
     }
 
-    //parse request headers
-    private ArrayList<String> parseRequest(Socket clientSocket) throws Exception {
+    //returns array of parsed request data
+    private ArrayList<String> returnParsedRequest(Socket clientSocket) throws Exception {
         //connect input stream to reader
         BufferedReader request = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
         //variable for reading stream
         ArrayList<String> data = new ArrayList<>();
-        String line = null;
+        String line;
+        
         //read stream and add data to array
         while ((line = request.readLine()) != null) {
             if (line.length() == 0) {
@@ -68,7 +65,7 @@ class EchoServer {
     }
 }
 
-public class Server {
+public class simpleServer {
 
     public static void main(String[] args) throws Exception {
         //create echo server object 
