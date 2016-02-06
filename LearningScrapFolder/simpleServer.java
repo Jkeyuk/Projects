@@ -26,10 +26,10 @@ class EchoServer {
 
     //response from server
     private void serverResponse(Socket clientSocket) throws Exception {
-        System.out.println("Connection Made");     
-        //send request data back to client
-        sendRequestDataBack( returnParsedRequest(clientSocket), clientSocket);
-        //close socket
+        System.out.println("Connection Made");
+        //send request data back to client    
+        sendRequestDataBack(returnParsedRequest(clientSocket), clientSocket);
+        //close socket       
         clientSocket.close();
     }
 
@@ -41,7 +41,7 @@ class EchoServer {
         //variable for reading stream
         ArrayList<String> data = new ArrayList<>();
         String line;
-        
+
         //read stream and add data to array
         while ((line = request.readLine()) != null) {
             if (line.length() == 0) {
@@ -51,6 +51,15 @@ class EchoServer {
         }
         //return array of data
         return data;
+    }
+
+    //get method from http request
+    private String getHttpMethod(ArrayList<String> parsedData) {
+        String method = parsedData.get(0);
+        String[] parts = method.split("/");
+        method = parts[0].trim();
+
+        return method;
     }
 
     //send request headers back
@@ -65,7 +74,7 @@ class EchoServer {
     }
 }
 
-public class simpleServer {
+public class Server {
 
     public static void main(String[] args) throws Exception {
         //create echo server object 
