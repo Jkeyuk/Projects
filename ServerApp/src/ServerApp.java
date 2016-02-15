@@ -1,4 +1,4 @@
-
+//****boiler plate from gui builder *****
 public class ServerApp extends javax.swing.JFrame {
 
     /**
