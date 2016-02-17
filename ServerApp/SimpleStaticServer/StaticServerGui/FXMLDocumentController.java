@@ -20,13 +20,18 @@ public class FXMLDocumentController implements Initializable {
     private TextField portInput;
 
     @FXML
+    //start server button
     private void handleButtonAction(ActionEvent event) {
+        //get directory and port input from gui
         String directory = directoryInput.getText().trim();
         String port = portInput.getText().trim();
         int realPort = Integer.parseInt(port);
-
+        //create server as runnable
         ServerAppRunnable websiteServer = new ServerAppRunnable(realPort, directory);
+        //create thread with runnable and set thread to deamon
         Thread t = new Thread(websiteServer);
+        t.setDaemon(true);
+        //start thread
         t.start();
         System.out.println(directory);
         System.out.println(realPort);

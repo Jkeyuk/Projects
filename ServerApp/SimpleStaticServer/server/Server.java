@@ -6,10 +6,6 @@ package server;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- *
- * @author jonathan keyuk
- */
 public class Server {
 
     private final ServerSocket serverSocket;

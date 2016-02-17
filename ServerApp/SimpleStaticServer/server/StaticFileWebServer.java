@@ -70,7 +70,7 @@ public class StaticFileWebServer extends WebServer {
         //return file data
         return fileData;
     }
-
+    //returns mimetype
     private String returnMimeType() {
         String mime = null;
         String[] parts = requestPath.split("\\.");
