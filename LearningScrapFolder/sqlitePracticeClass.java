@@ -14,12 +14,13 @@ public class sqlitePracticeClass {
             Class.forName("org.sqlite.JDBC");
             //open connection
             c = DriverManager.getConnection("jdbc:sqlite:test.db");
-            //execute query
+            //create statement
             stm = c.createStatement();
-            //get data
+            //excecute query
             try (ResultSet results = stm.executeQuery("select * from testTable")) {
                 System.out.println("ID|NAME");
                 System.out.println("_____________");
+                //get data
                 while (results.next()) {
                     int id = results.getInt("ID");
                     String name = results.getString("NAME");
