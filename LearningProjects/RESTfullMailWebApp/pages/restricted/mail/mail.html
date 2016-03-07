@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mail/Parcels</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="mail.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div>
+            <h1>Mail and Parcels</h1>
+            <ul id="menu">
+                <li><button id="addItemButton">ADD ITEM</button></li>               
+            </ul>
+            <div id="addForm" style="display:none">              
+                Address/UNIT: <input id="inAddress" type="text" name="address"><br>
+                Recipient Name: <input id="inName" type="text" name="name"><br>
+                Tracking #: <input id="inTrack" type="text" name="tracking"><br>
+                Package Type: <input id="inType" type="text" name="type"><br>
+                <button id="addItemSubmitButton">Submit</button>
+            </div>
+            <h3>Mail and Parcels in holding</h3>
+            <table id="mailList">             
+            </table>
+        </div>
+        <script src="mail.js"></script>
+    </body>
+</html>
