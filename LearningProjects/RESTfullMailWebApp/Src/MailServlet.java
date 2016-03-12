@@ -54,9 +54,9 @@ public class MailServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException {
         //parse data
-         String address = request.getParameter("address");
+         String tracking = request.getParameter("tracking");
         try {//send query to database
-            database.deleteRecord("MAIL", "address="+address);
+            database.deleteRecord("MAIL", "tracking="+tracking);
             response.setStatus(200);
         } catch (SQLException ex) {
             Logger.getLogger(MailServlet.class.getName()).log(Level.SEVERE, null, ex);

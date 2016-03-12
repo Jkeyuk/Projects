@@ -48,7 +48,7 @@ function addMail() {
     xhttp.send(paraValues);
 }
 function removeItem() {
-    var value = this.parentNode.parentNode.childNodes[0].innerHTML;
+    var value = this.parentNode.parentNode.childNodes[2].innerHTML;
     //make request object
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -57,7 +57,7 @@ function removeItem() {
         }
     };
     //config request
-    xhttp.open("DELETE", "./MailServlet?address=" + value, true);
+    xhttp.open("DELETE", "./MailServlet?tracking=" + value, true);
     //send request
     xhttp.send();
 }
