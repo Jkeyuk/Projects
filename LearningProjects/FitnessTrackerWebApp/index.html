@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fitness Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Welcome To Fitness Tracker</h1>
+        <p>Record your workouts, track your history.</p>
+        <div id="loginForm">   
+            <p>Please Login</p>
+            UserName: <input type="text" id="userIn" name="username"><br>
+            PassWord: <input type="password" id="passIn" name="password"><br>    
+            <button id="userSubButton">Enter</button>   
+            <div id="responseBox"></div>
+            <button id="signUpFormBut">Need to sign up?</button>
+        </div>
+        <div id="signForm" style="display:none">
+            <h2>Sign Up Your New Account</h2>            
+            UserName:<input type="text" id="signUpUser"  name="username"><br>
+            PassWord:<input type="password" id="signUpPass" name="password"><br>
+            <button id="signUpBut">Sign Up</button>            
+        </div>
+        <script src="index.js"></script>
+    </body>
+</html>

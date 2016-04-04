@@ -1,0 +1,64 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+/*NAV BAR*/
+#navBar{
+    list-style-type: none;
+    overflow: hidden;
+    background-color: #33ffff;
+    border-bottom: 1px solid black;
+}
+#navBar li{
+    padding: 5px;
+    cursor: pointer;
+    display: inline;
+    font-size: 2em;
+    border-right: 1px solid black;
+}
+#navBar a{
+    text-decoration: none; 
+    color: black;
+}
+/*END NAV BAR*/
+/*WIEGHT LIFTING FORM*/
+#weightForm,#finishedExerBut{
+    display: none;
+}
+#dateHeader,#exerNameHeader{
+    display: inline;
+}
+#weightTableWrap input{
+    width:60px;
+}
+/*END WIEGHT LIFTING FORM*/
+input,select{
+    margin: 5px;
+    font-size: 16px;
+}
+label{
+    margin: 5px;
+    font-size: 24px;
+}
+button{
+    padding: 5px;
+    margin: 5px;
+    font-size: 16px;
+}
+h1,h2,h3,h4,p{
+    margin: 5px;
+}
+table,th,td{
+    text-align: center;
+    min-width: 20px;
+    padding: 5px;
+    border: 1px solid black;
+}
+table
+{
+    width: 300px;
+    margin: 5px;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}

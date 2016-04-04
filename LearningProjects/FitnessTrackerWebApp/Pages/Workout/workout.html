@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>New Session</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="workout.css" type="text/css">
+    </head>
+    <body>
+        <div id="navWrap"><!--NAV BAR -->
+            <ul id="navBar">
+                <li><a href="../home.html">Home</a></li>          
+                <li><a href="../History/history.html">History</a></li>
+            </ul>
+        </div><!--Page Start -->
+        <h1>Workout Log</h1>
+        <div id="workTypeWrap">  
+            <label>Type of Workout:
+                <select id="workTypeInput">
+                    <option  disabled="" selected="">--Select type of Workout--</option>
+                    <option value="weightlifting">Weight Lifting</option>                    
+                </select>
+            </label>
+        </div>
+        <div id="weightForm"><!--WEIGHT FORM -->
+            <div id="formSetup"> 
+                <label>Date: <input type="date" id="dateInput"></label><br>                     
+                <label>Exercise Name:<input type="text" id="exerNameInput"></label><br> 
+                <label>Number Of Sets:<input type="number" id="setNumInput"></label>
+                <button id="exerSubBut">Add Exercise</button>
+            </div>
+            <div id="weightTableWrap">
+                <h3 id="dateHeader"></h3>
+                <h3 id="exerNameHeader"></h3>
+                <table id="dataTable"></table><br>             
+                <button id="finishedExerBut">Finished Exercise</button>
+            </div>
+        </div>
+        <div id="summaryWrap"></div>
+        <script src="workout.js"></script>
+    </body>
+</html>
