@@ -13,6 +13,7 @@ import java.util.zip.ZipOutputStream;
 public class ZipMaker {
 
     private ZipOutputStream zipStream;
+    private String originalDirectory;
 
     public ZipMaker(String dest) {
         try {
@@ -23,7 +24,8 @@ public class ZipMaker {
         }
     }
 
-    public void zip(String fileLocation) {
+    public void zip(String fileLocation, String origin) {
+        this.originalDirectory = origin;
         //create file object from file location
         File file = new File(fileLocation);
         //check if file is directory or single file
@@ -31,7 +33,7 @@ public class ZipMaker {
             //if directory create array of files recursivly add them to zip
             File[] arrayOfFiles = file.listFiles();
             for (File files : arrayOfFiles) {
-                zip(files.getAbsolutePath());
+                zip(files.getAbsolutePath(), originalDirectory);
             }
         } else {
             //if single file just zip file
@@ -43,8 +45,9 @@ public class ZipMaker {
     private void ZipIt(File file) {
         ZipEntry zipEntry;
         try {
+            String trueName = new File(originalDirectory).toURI().relativize(file.toURI()).getPath();
             //create zip entry with the file name
-            zipEntry = new ZipEntry(file.getName());
+            zipEntry = new ZipEntry(trueName);
             //place zip entry into the zip output stream 
             zipStream.putNextEntry(zipEntry);
             //create file input stream to read file object
