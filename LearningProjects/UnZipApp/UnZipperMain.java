@@ -1,12 +1,31 @@
 package unzipper;
 
+import java.util.Scanner;
+
 public class UnZipperMain {
 
     public static void main(String[] args) {
-        //create unzipper object with path to output folder
-        UnZipper unzipper = new UnZipper("C:\\Users\\Public\\JavascriptApps\\Temp\\Netbeans\\practise");
-        //call unzip method pointing to file to unzip
-        unzipper.unzip("C:\\Users\\Public\\JavascriptApps\\Temp\\Netbeans\\test.zip");
+        promptUser();
     }
 
+    public static void promptUser() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println();
+        System.out.println("Please enter path to output folder:");
+        String outFolder = scan.nextLine();
+        UnZipper unzipper = new UnZipper(outFolder);
+        System.out.println();
+        System.out.println("To Exit program just enter exit...otherwise");
+        while (true) {
+            System.out.println("Please enter full pathname to zip file to unzip:");
+            String fileToUnzip = scan.nextLine();
+            if (fileToUnzip.equals("exit")) {
+                System.out.println("Shutting down program...");
+                break;
+            } else {
+                System.out.println("Unzipping...");
+                unzipper.unzip(fileToUnzip);
+            }
+        }
+    }
 }
