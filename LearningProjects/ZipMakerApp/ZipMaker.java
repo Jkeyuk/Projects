@@ -12,19 +12,16 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipMaker {
 
-    private ZipOutputStream zipStream;
+    private final ZipOutputStream zipStream;
     private String originalDirectory;
 
-    public ZipMaker(String dest) {
-        try {
-            //initialize zip output stream with file output stream to destination
-            this.zipStream = new ZipOutputStream(new FileOutputStream(dest));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ZipMaker.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public ZipMaker(String dest) throws FileNotFoundException {
+        //initialize zip output stream with file output stream to destination
+        this.zipStream = new ZipOutputStream(new FileOutputStream(dest));
     }
 
     public void zip(String fileLocation, String origin) {
+        //initialize origin of the file
         this.originalDirectory = origin;
         //create file object from file location
         File file = new File(fileLocation);
