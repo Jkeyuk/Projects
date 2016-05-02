@@ -39,7 +39,7 @@ public class WebScraperMain {
 
     public static boolean handleInput(String site) throws MalformedURLException, IOException {
         //if input is exit, turn off loop
-        if (site.equals("exit")) {
+        if (site.equalsIgnoreCase("exit")) {
             System.out.println("shutting down program...");
             return false;
         } else {//else scrape website
