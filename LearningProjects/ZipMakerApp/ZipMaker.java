@@ -16,8 +16,9 @@ public class ZipMaker {
     private String originalDirectory;
 
     public ZipMaker(String dest) throws FileNotFoundException {
+        File file = new File(dest);
         //initialize zip output stream with file output stream to destination
-        this.zipStream = new ZipOutputStream(new FileOutputStream(dest));
+        this.zipStream = new ZipOutputStream(new FileOutputStream(file));
     }
 
     public void zip(String fileLocation, String origin) {
