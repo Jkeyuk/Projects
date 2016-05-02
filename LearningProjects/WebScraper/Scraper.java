@@ -17,38 +17,33 @@ import org.jsoup.select.Elements;
 
 public class Scraper {
 
-    private URL url;
+    private final URL url;
     private final String html;
 
-    public Scraper(String url) {
-        try {//create url object with string as arg
-            this.url = new URL(url);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(Scraper.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public Scraper(String url) throws MalformedURLException, IOException {
+        //create url object with string as arg
+        this.url = new URL(url);
         //get html from URL
         this.html = rawHTML();
     }
 
     //return raw HTML as string
-    private String rawHTML() {
+    private String rawHTML() throws IOException {
         //String to be returned
         String returnString = "";
         //try to get input stream and read lines to String
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(
-                url.openStream()))) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                returnString += " " + inputLine;
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Scraper.class.getName()).log(Level.SEVERE, null, ex);
-        }//return String
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                url.openStream()));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            returnString += " " + inputLine;
+        }
+        //return String
         return returnString;
     }
 
     //return array of links from the html
-    public ArrayList<String> getLinks() {
+    private ArrayList<String> getLinks() {
         //array to be returned
         ArrayList<String> returnArray = new ArrayList<>();
         //build document object
@@ -76,7 +71,7 @@ public class Scraper {
         try {//write array of links to file
             try (FileWriter writer = new FileWriter(file)) {
                 for (String link : links) {
-                    writer.write(link + "\n");
+                    writer.write(link + System.lineSeparator());
                 }//flush buffer to file
                 writer.flush();
             }
