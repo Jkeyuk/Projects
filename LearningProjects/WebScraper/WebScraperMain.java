@@ -9,10 +9,13 @@ import java.util.logging.Logger;
 public class WebScraperMain {
 
     public static void main(String[] args) {
+        //sentinel to control flow
         boolean sentinel = true;
+        //keeps looping if there are errors from user input
         while (sentinel == true) {
+            //prompt user for website to scrape
             String site = promptUserForSite();
-            try {
+            try {//calls method to scrape site
                 sentinel = handleInput(site);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(WebScraperMain.class.getName()).log(Level.SEVERE, null, ex);
@@ -38,7 +41,7 @@ public class WebScraperMain {
     }
 
     public static boolean handleInput(String site) throws MalformedURLException, IOException {
-        //if input is exit, turn off loop
+        //if input is exit, turn off loop by returning false
         if (site.equalsIgnoreCase("exit")) {
             System.out.println("shutting down program...");
             return false;
@@ -52,10 +55,12 @@ public class WebScraperMain {
     }
 
     public static void errorMessage() {
+        System.out.println();
         System.out.println("**********************************************");
         System.out.println("There has been an error with the webiste you entered");
         System.out.println("an example of a website would be: www.google.com");
         System.out.println("Please retry your input again");
         System.out.println("**********************************************");
+        System.out.println();
     }
 }
