@@ -1,85 +1,77 @@
 package zipmakerapp;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-public class ZipMakerAppMain {
+public class ZipMaker {
 
-    public static void main(String[] args) {
-        //sentinel for control flow
-        boolean sentinel = true;
-        //zipmaker object to send to method
-        ZipMaker zipper = null;
-        //loop untill there are no errors from user input
-        while (sentinel) {
-            try {//get path to zip from user and turn sentinel off
-                zipper = askForPathToZip();
-                sentinel = false;
-            } catch (FileNotFoundException ex) {//if file not found re loop and show error
-                Logger.getLogger(ZipMakerAppMain.class.getName()).log(Level.SEVERE, null, ex);
-                errorMessage();
+    private final ZipOutputStream zipStream;
+    private String originalDirectory;
+
+    public ZipMaker(String dest) throws FileNotFoundException {
+        //create file from destination
+        File file = new File(dest);
+        //initialize zip output stream with file output stream to destination
+        this.zipStream = new ZipOutputStream(new FileOutputStream(file));
+    }
+
+    public void zip(String fileLocation, String origin) {
+        //initialize origin of the file
+        this.originalDirectory = origin;
+        //create file object from file location
+        File file = new File(fileLocation);
+        //check if file is directory or single file
+        if (file.isDirectory()) {
+            //if directory create array of files recursivly add them to zip
+            File[] arrayOfFiles = file.listFiles();
+            for (File files : arrayOfFiles) {
+                zip(files.getAbsolutePath(), originalDirectory);
             }
-        }//prompt user for files to zip
-        askForFileToZip(zipper);
-    }
-
-    private static ZipMaker askForPathToZip() throws FileNotFoundException {
-        //string to make zipmaker
-        String dest = null;
-        //sentinel to control flow
-        boolean sentinel = true;
-        //scanner to read input from terminal
-        Scanner scan = new Scanner(System.in);
-        while (sentinel) {//loop until there are no errors with the input
-            System.out.println("***************************************************");
-            System.out.println("Enter path where you want to save your zip file...");
-            System.out.println("must end with zipName.zip where zipName can be any name:");
-            dest = scan.nextLine();
-            //if file path does not end with .zip re ask for pathname
-            sentinel = checkForZipFile(dest);
-        }//make zip maker with proper dest
-        ZipMaker zipper = new ZipMaker(dest);
-        //return zip maker
-        return zipper;
-    }
-
-    private static void askForFileToZip(ZipMaker zipper) {
-        //scanner to read terminal input
-        Scanner scan = new Scanner(System.in);
-        System.out.println("**************************************************");
-        System.out.println("To exit program just type exit otherwise");
-        System.out.println("Enter or drag and drop the file or Directory to zip");
-        //scan terminal input
-        String toZip = scan.nextLine();
-        //if input is exit shut down program, else zip file or directory
-        if (toZip.equalsIgnoreCase("exit")) {
-            System.out.println("Shutting Down...");
         } else {
-            System.out.println("Now Zipping...");
-            zipper.zip(toZip, toZip);
-            zipper.closeZipStream();
-            System.out.println("File zipped program is shutting down...");
+            //if single file just zip file
+            ZipIt(file);
         }
     }
 
-    private static void errorMessage() {
-        System.out.println("*********************************************");
-        System.out.println("That pathname is incorrect");
-        System.out.println("A example would be c:\\users\\newzip.zip");
-        System.out.println("please try again");
-        System.out.println("************************************************");
-    }
-
-    private static boolean checkForZipFile(String dest) {
-        //make sure destination file ends with .zip
-        boolean test = dest.endsWith(".zip");
-        if (test) {//if true turn of sentinel by returning false
-            return false;
-        } else {//else show error message and return true to keep looping
-            errorMessage();
-            return true;
+    @SuppressWarnings("ConvertToTryWithResources")
+    private void ZipIt(File file) {
+        ZipEntry zipEntry;
+        try {
+            String trueName = new File(originalDirectory).toURI().relativize(file.toURI()).getPath();
+            //create zip entry with the file name
+            zipEntry = new ZipEntry(trueName);
+            //place zip entry into the zip output stream 
+            zipStream.putNextEntry(zipEntry);
+            //create file input stream to read file object
+            FileInputStream fileInputStream = new FileInputStream(file);
+            //create byte array to buffer bytes read
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            //write bytes to the entry in the zip stream
+            while ((bytesRead = fileInputStream.read(buf)) > 0) {
+                zipStream.write(buf, 0, bytesRead);
+            }//close entry to prep zip stream for new entry
+            zipStream.closeEntry();
+            //close file input stream           
+            fileInputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ZipMaker.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public void closeZipStream() {
+        try {//close zip output stream
+            zipStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ZipMaker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }
