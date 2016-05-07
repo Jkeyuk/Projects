@@ -22,11 +22,13 @@ public class RssFeedReader {
 
     //url object to hold URL to rss feed
     private URL url;
+    //NodeList of rss nodes
+    private NodeList rssItems;
     //links gathered from rss feed items
     private ArrayList<String> links = new ArrayList<>();
 
     public RssFeedReader(String url) {
-        try {//try to create url object
+        try {//try to create url object with string to rss feed
             this.url = new URL("http://" + url);
         } catch (MalformedURLException ex) {
             Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
@@ -34,35 +36,37 @@ public class RssFeedReader {
     }
 
     //displays feed in terminal window
-    public void displayFeed() throws IOException, SAXException {
-        //get node list from url stream
-        NodeList items = getNodeList();
-        //for each items node display title, description, and link
-        for (int i = 0; i < items.getLength(); i++) {
-            Node node = items.item(i);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                //cast node to element
-                Element e = (Element) node;
-                //get title element text
-                String title
-                        = e.getElementsByTagName("title").item(0).getTextContent().trim();
-                //get description element text
-                String description
-                        = e.getElementsByTagName("description").item(0).getTextContent().trim();
-                //get link element text
-                String link
-                        = e.getElementsByTagName("link").item(0).getTextContent().trim();
-                links.add(link);
-                //display feed number and values
-                displayValues(i, title, description, link);
+    public boolean displayFeed() {
+        //get node list from url stream boolean to control user input flow
+        boolean sentinel = getNodeList();
+        //make sure rss items were loaded
+        if (rssItems != null) {
+            //for each items node display title, description, and link
+            for (int i = 0; i < rssItems.getLength(); i++) {
+                Node node = rssItems.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    //cast node to element
+                    Element e = (Element) node;
+                    //get title element text
+                    String title
+                            = e.getElementsByTagName("title").item(0).getTextContent().trim();
+                    //get description element text
+                    String description
+                            = e.getElementsByTagName("description").item(0).getTextContent().trim();
+                    //get link element text
+                    String link
+                            = e.getElementsByTagName("link").item(0).getTextContent().trim();
+                    links.add(link);//<--add links to array
+                    //display feed number and values
+                    displayValues(i, title, description, link);
+                }
             }
-        }
+        }//return boolean to signal sentinel in main method 
+        return sentinel;
     }
 
     //get node list from url stream
-    private NodeList getNodeList() throws IOException, SAXException {
-        //node list to be returned
-        NodeList items = null;
+    private boolean getNodeList() {
         try {
             //build document factory
             DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
@@ -75,11 +79,12 @@ public class RssFeedReader {
             //extract root element from document
             Element root = doc.getDocumentElement();
             //get nodelist of items
-            items = root.getElementsByTagName("item");
-        } catch (ParserConfigurationException ex) {
+            rssItems = root.getElementsByTagName("item");
+            return false;// <--return false to signal sentinel to break loop
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
-        }//return items
-        return items;
+            return true;// <--if error with user input signal sentinel to loop
+        }
     }
 
     //display title, description, and link from nodes
