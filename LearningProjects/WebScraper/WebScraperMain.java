@@ -1,10 +1,6 @@
 package webscraper;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class WebScraperMain {
 
@@ -14,16 +10,8 @@ public class WebScraperMain {
         //keeps looping if there are errors from user input
         while (sentinel == true) {
             //prompt user for website to scrape
-            String site = promptUserForSite();
-            try {//calls method to scrape site
-                sentinel = handleInput(site);
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(WebScraperMain.class.getName()).log(Level.SEVERE, null, ex);
-                errorMessage();
-            } catch (IOException ex) {
-                Logger.getLogger(WebScraperMain.class.getName()).log(Level.SEVERE, null, ex);
-                errorMessage();
-            }
+            String site = promptUserForSite().trim();
+            sentinel = handleInput(site);
         }
     }
 
@@ -33,18 +21,20 @@ public class WebScraperMain {
         //print message
         System.out.println("*************************************************");
         System.out.println("To Exit just enter exit...otherwise");
-        System.out.println("Please enter the website to scrape..do not include http://");
+        System.out.println("Please enter the website to scrape..example: www.example.com");
         //get input from user
         String returnString = in.nextLine();
         //return input as string
         return returnString;
     }
 
-    public static boolean handleInput(String site) throws MalformedURLException, IOException {
+    public static boolean handleInput(String site) {
         //if input is exit, turn off loop by returning false
         if (site.equalsIgnoreCase("exit")) {
             System.out.println("shutting down program...");
             return false;
+        } else if (site.equals("")) {
+            return true;
         } else {//else scrape website
             System.out.println("Scrapping site now...");
             Scraper scraper;
