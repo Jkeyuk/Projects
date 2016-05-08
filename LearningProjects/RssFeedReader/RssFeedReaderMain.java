@@ -12,7 +12,7 @@ public class RssFeedReaderMain {
         //keeps looping until there are no errors with user input
         while (sentinel) {
             //get url of rss feed
-            String feedToRead = promptUserForFeed();
+            String feedToRead = promptUserForFeed().trim();
             //create rss feed reader with url
             r = new RssFeedReader(feedToRead);
             //display feed and return false if no user input error  
