@@ -17,26 +17,33 @@ import org.jsoup.select.Elements;
 
 public class Scraper {
 
-    private final URL url;
-    private final String html;
+    private URL url;
+    private String html;
 
-    public Scraper(String url) throws MalformedURLException, IOException {
-        //create url object with string as arg
-        this.url = new URL(url);
-        //get html from URL
-        this.html = rawHTML();
+    public Scraper(String url) {
+        try {//create url object with string as arg
+            this.url = new URL(url);
+            //get html from URL
+            this.html = rawHTML();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Scraper.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //return raw HTML as string
-    private String rawHTML() throws IOException {
+    private String rawHTML() {
         //String to be returned
         String returnString = "";
-        //try to get input stream and read lines to String
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                url.openStream()));
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-            returnString += " " + inputLine;
+        try {
+            //try to get input stream and read lines to String
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    url.openStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                returnString += " " + inputLine;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Scraper.class.getName()).log(Level.SEVERE, null, ex);
         }
         //return String
         return returnString;
@@ -68,13 +75,12 @@ public class Scraper {
         ArrayList<String> links = getLinks();
         //create file
         File file = new File(url.getHost() + ".txt");
-        try {//write array of links to file
-            try (FileWriter writer = new FileWriter(file)) {
-                for (String link : links) {
-                    writer.write(link + System.lineSeparator());
-                }//flush buffer to file
-                writer.flush();
-            }
+        //write array of links to file
+        try (FileWriter writer = new FileWriter(file)) {
+            for (String link : links) {
+                writer.write(link + System.lineSeparator());
+            }//flush buffer to file
+            writer.flush();
         } catch (IOException ex) {
             Logger.getLogger(Scraper.class.getName()).log(Level.SEVERE, null, ex);
         }
