@@ -1,84 +1,63 @@
 package zipmakerapp;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ZipMakerAppMain {
 
     public static void main(String[] args) {
-        //sentinel for control flow
-        boolean sentinel = true;
-        //zipmaker object to send to method
-        ZipMaker zipper = null;
-        while (sentinel) {//loop untill there are no errors
-            try {//get path to zip from user and turn sentinel off
-                zipper = askForPathToZip();
-                sentinel = false;
-            } catch (FileNotFoundException ex) {//if file not found re loop and show error
-                Logger.getLogger(ZipMakerAppMain.class.getName()).log(Level.SEVERE, null, ex);
-                errorMessage();
-            }
-        }//prompt user for files to zip
-        askForFileToZip(zipper);
+        //get name of zip file
+        String zipFileName = askUserNameOfZipFile();
+        //get directory to save zip to
+        String directory = askUserForDirectory();
+        //get file or folder to zip
+        String toZip = askUserForFilesToZip();
+        //create zip maker object
+        ZipMaker zipper = new ZipMaker(directory + File.separator + zipFileName);
+        //zip input file or folder
+        zipper.zip(toZip, toZip);
+        //close zip stream
+        zipper.closeZipStream();
     }
 
-    private static ZipMaker askForPathToZip() throws FileNotFoundException {
-        //string to make zipmaker
-        String dest = null;
-        //sentinel to control flow
-        boolean sentinel = true;
-        //scanner to read input from terminal
-        Scanner scan = new Scanner(System.in);
-        while (sentinel) {
-            System.out.println("***************************************************");
-            System.out.println("Enter path where you want to save your zip file...");
-            System.out.println("must end with zipName.zip where zipName can be any name:");
-            dest = scan.nextLine();
-            //if file path does not end with .zip re ask for pathname
-            sentinel = checkForZipFile(dest);
-        }//make zip maker with proper dest
-        ZipMaker zipper = new ZipMaker(dest);
-        //return zip maker
-        return zipper;
+    private static String askUserNameOfZipFile() {
+        //string to return
+        String returnString = "";
+        //scanner to scan terminal
+        Scanner scanner = new Scanner(System.in);
+        do {//keep looping until user inputs proper name
+            System.out.println("");
+            System.out.println("What would you like to name your zip file?");
+            System.out.println("Must end with .zip, example: something.zip");
+            returnString = scanner.nextLine();
+        } while (!returnString.endsWith(".zip"));
+        return returnString;
     }
 
-    private static void askForFileToZip(ZipMaker zipper) {
-        //scanner to read terminal input
-        Scanner scan = new Scanner(System.in);
-        System.out.println("**************************************************");
-        System.out.println("To exit program just type exit otherwise");
-        System.out.println("Enter or drag and drop the file or Directory to zip");
-        //scan terminal input
-        String toZip = scan.nextLine();
-        if (toZip.equalsIgnoreCase("exit")) {
-            System.out.println("Shutting Down...");
-        } else {
-            System.out.println("Now Zipping...");
-            zipper.zip(toZip, toZip);
-            zipper.closeZipStream();
-            System.out.println("File zipped program is shutting down...");
-        }
-
+    private static String askUserForDirectory() {
+        //string to return
+        String returnString = "";
+        //scanner to scan terminal
+        Scanner scanner = new Scanner(System.in);
+        do {//keep looping until proper directory is inputed
+            System.out.println("");
+            System.out.println("Please enter path of where you want to save your zip");
+            System.out.println("example: c:\\users\\someFolder");
+            returnString = scanner.nextLine();
+        } while (!new File(returnString).isDirectory());
+        return returnString;
     }
 
-    private static void errorMessage() {
-        System.out.println("*********************************************");
-        System.out.println("That pathname is incorrect");
-        System.out.println("A example would be c:\\users\\newzip.zip");
-        System.out.println("please try again");
-        System.out.println("************************************************");
-    }
-
-    private static boolean checkForZipFile(String dest) {
-        //make sure destination file ends with .zip
-        boolean test = dest.endsWith(".zip");
-        if (test) {
-            return false;
-        } else {
-            errorMessage();
-            return true;
-        }
+    private static String askUserForFilesToZip() {
+        //string to return
+        String returnString = "";
+        //scanner to scan terminal
+        Scanner scanner = new Scanner(System.in);
+        do {
+            System.out.println("");
+            System.out.println("Please enter Path to file or folder to zip");
+            returnString = scanner.nextLine();
+        } while (!new File(returnString).isDirectory());
+        return returnString;
     }
 }
