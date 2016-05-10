@@ -24,7 +24,7 @@ public class Scraper {
 
     public Scraper(String url) {
         try {//create url object with string as arg
-            this.url = new URL(url);
+            this.url = new URL("http://" + url);
             //get html from URL
             this.html = rawHTML();
         } catch (MalformedURLException ex) {
