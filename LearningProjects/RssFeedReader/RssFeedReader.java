@@ -36,9 +36,9 @@ public class RssFeedReader {
     }
 
     //displays feed in terminal window
-    public boolean displayFeed() {
+    public void displayFeed() {
         //get node list from url stream boolean to control user input flow
-        boolean sentinel = getNodeList();
+        getNodeList();
         //make sure rss items were loaded
         if (rssItems != null) {
             //for each items node display title, description, and link
@@ -61,14 +61,12 @@ public class RssFeedReader {
                     displayValues(i, title, description, link);
                 }
             }
-        }//return boolean to signal sentinel in main method 
-        return sentinel;
+        }
     }
 
     //get node list from url stream
-    private boolean getNodeList() {
-        try {
-            //build document factory
+    private void getNodeList() {
+        try {//build document factory
             DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
             //make document builder
             DocumentBuilder build = fac.newDocumentBuilder();
@@ -80,10 +78,8 @@ public class RssFeedReader {
             Element root = doc.getDocumentElement();
             //get nodelist of items
             rssItems = root.getElementsByTagName("item");
-            return false;// <--return false to signal sentinel to break loop
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
-            return true;// <--if error with user input signal sentinel to loop
         }
     }
 
@@ -99,16 +95,20 @@ public class RssFeedReader {
         System.out.println("Link: " + link);
     }
 
-    //open browser for user directing them to desired link
+    //open browser for user and direct them to desired link
     public void goToLink(int num) {
-        if (Desktop.isDesktopSupported()) {//<--check if desktop is supported
-            try {//try to open browser with selected link
-                Desktop.getDesktop().browse(new URI(links.get(num - 1)));
-            } catch (IOException | URISyntaxException ex) {
-                Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
+        if (num <= links.size()) {//<--check if user input is valid
+            if (Desktop.isDesktopSupported()) {//<--check if desktop is supported
+                try {//try to open browser with selected link
+                    Desktop.getDesktop().browse(new URI(links.get(num - 1)));
+                } catch (IOException | URISyntaxException ex) {
+                    Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {//if not supported print sorry message
+                System.out.println("System does not support this...Sorry :(");
             }
-        } else {//if not supported print sorry message
-            System.out.println("System does not support this...Sorry :(");
+        } else {
+            System.out.println("That feed link number does not an exist");
         }
     }
 }
