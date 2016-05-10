@@ -32,25 +32,15 @@ public class WebScraperMain {
         //if input is exit, turn off loop by returning false
         if (site.equalsIgnoreCase("exit")) {
             System.out.println("shutting down program...");
-            return false;
+            return false;//<--signal sentinel to exit loop
         } else if (site.equals("")) {
-            return true;
+            return true;//<--signal sentinel to keep looping
         } else {//else scrape website
             System.out.println("Scrapping site now...");
             Scraper scraper;
             scraper = new Scraper("http://" + site);
             scraper.saveLinks();
-            return true;
+            return true;//<--signal sentinel to keep looping
         }
-    }
-
-    public static void errorMessage() {
-        System.out.println();
-        System.out.println("**********************************************");
-        System.out.println("There has been an error with the webiste you entered");
-        System.out.println("an example of a website would be: www.google.com");
-        System.out.println("Please retry your input again");
-        System.out.println("**********************************************");
-        System.out.println();
     }
 }
