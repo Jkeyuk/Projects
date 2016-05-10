@@ -29,25 +29,30 @@ public class UnZipper {
             ZipEntry zEntery = zipInputStream.getNextEntry();
             //while zip input stream has entries do..
             while (zEntery != null) {
-                //make new file with path to output folder and zentry name
-                File file = new File(
-                        OUT_PUT_FOLDER + File.separator + zEntery.getName());
-                //create parent folder
-                File newFolder = new File(file.getParent());
-                newFolder.mkdirs();
-                //create file output stream to write to file
-                FileOutputStream fileOutput = new FileOutputStream(file);
-                //create byte array to buffer bytes read
-                byte[] buffer = new byte[1024];
-                //read zip input stream and write to file
-                int x;
-                while ((x = zipInputStream.read(buffer)) > 0) {
-                    fileOutput.write(buffer, 0, x);
-                }//close file output and get next entry in zip stream
-                fileOutput.close();
-                zEntery = zipInputStream.getNextEntry();
-            }
-            //close zip entry and stream
+                if (zEntery.isDirectory()) {
+                    File file = new File(
+                            OUT_PUT_FOLDER + File.separator + zEntery.getName() + "/");
+                    zEntery = zipInputStream.getNextEntry();
+                } else {
+                    //make new file with path to output folder and zentry name
+                    File file = new File(
+                            OUT_PUT_FOLDER + File.separator + zEntery.getName());
+                    //create parent folder
+                    File newFolder = new File(file.getParent());
+                    newFolder.mkdirs();
+                    //create file output stream to write to file
+                    FileOutputStream fileOutput = new FileOutputStream(file);
+                    //create byte array to buffer bytes read
+                    byte[] buffer = new byte[1024];
+                    //read zip input stream and write to file
+                    int x;
+                    while ((x = zipInputStream.read(buffer)) > 0) {
+                        fileOutput.write(buffer, 0, x);
+                    }//close file output and get next entry in zip stream
+                    fileOutput.close();
+                    zEntery = zipInputStream.getNextEntry();
+                }
+            }//close zip entry and stream
             zipInputStream.closeEntry();
             zipInputStream.close();
         } catch (FileNotFoundException ex) {
