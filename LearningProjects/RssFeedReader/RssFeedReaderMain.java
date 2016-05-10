@@ -1,61 +1,76 @@
 package rssfeedreader;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 public class RssFeedReaderMain {
 
     public static void main(String[] args) {
-        //rss feed reader object
-        RssFeedReader r = null;
-        //sentinel to control flow
-        boolean sentinel = true;
-        //keeps looping until there are no errors with user input
-        while (sentinel) {
-            //get url of rss feed
-            String feedToRead = promptUserForFeed().trim();
-            //create rss feed reader with url
-            r = new RssFeedReader(feedToRead);
-            //display feed and return false if no user input error  
-            sentinel = r.displayFeed();
-        }//ask user which link they want to go to
-        promptUserForLinkNum(r);
+        //get feed address from user
+        String rssFeedAddress = askUserForRssAddress();
+        //use address to build reader object
+        RssFeedReader reader = new RssFeedReader(rssFeedAddress);
+        //display rss feed
+        reader.displayFeed();
+        //get link number user wishes to visit
+        int linkNum = askUserForLinkNum();
+        //open browser for user and direct to link
+        reader.goToLink(linkNum);
     }
 
-    //get url to rss feed from user
-    private static String promptUserForFeed() {
-        Scanner in = new Scanner(System.in);
-        String feed = null;
-        do {//loop until user enters valid input
-            System.out.println("---------------------------------------");
-            System.out.println("Please enter the RSS feed, example: www.somefeed.com");
-            feed = in.nextLine();
-        } while (feed.trim().equals(""));
-        return feed;
+    private static String askUserForRssAddress() {
+        //return string 
+        String returnString;
+        //object to scan terminal input
+        Scanner scan = new Scanner(System.in);
+        do {//keeps looping untill no errors with input
+            System.out.println("");
+            System.out.println("Please enter the address of the rss feed you wish to read");
+            System.out.println("example: www.somefeed.com");
+            returnString = scan.nextLine().trim();
+        } while (!checkConnection(returnString));
+        return returnString;
     }
 
-    //prompt user for link they wish go to
-    private static void promptUserForLinkNum(RssFeedReader r) {
-        String num;//<--string to hold input
-        Scanner in = new Scanner(System.in);
-        do {//keeps looping unitl user enters integer
-            System.out.println("---------------------------------------");
-            System.out.println("Enter feed number of link you wish to visit");
-            num = in.nextLine();
-        } while (checkInt(num));
-        //convert input into int
-        int number = Integer.parseInt(num);
-        //open browser and go to feed numbers link
-        r.goToLink(number);
+    private static int askUserForLinkNum() {
+        //string to hold input
+        String input;
+        //object to scan terminal
+        Scanner scan = new Scanner(System.in);
+        do {//keeps looping until no errors with user input
+            System.out.println("");
+            System.out.println("Please enter the Feed item number of the link you wish to visit:");
+            input = scan.nextLine();
+        } while (!checkInt(input));
+        //cast input to int
+        int returnInt = Integer.parseInt(input);
+        return returnInt;
     }
 
-    //check if num is int
-    private static boolean checkInt(String n) {
-        try {//if int turn off loop, if not return true to keep loop
-            Integer.parseInt(n);
+    private static boolean checkConnection(String s) {
+        try {//check user input for valid connection
+            URL url = new URL("http://" + s);
+            URLConnection con = url.openConnection();
+            String type = con.getContentType();
+            return type.endsWith("xml");
+        } catch (NullPointerException | IllegalArgumentException ex) {
             return false;
-        } catch (NumberFormatException e) {
-            return true;
+        } catch (MalformedURLException ex) {
+            return false;
+        } catch (IOException ex) {
+            return false;
         }
     }
 
+    private static boolean checkInt(String i) {
+        try {//check user input for valid input
+            int test = Integer.parseInt(i);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
 }
