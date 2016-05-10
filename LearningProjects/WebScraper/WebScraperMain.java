@@ -1,46 +1,40 @@
 package webscraper;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 public class WebScraperMain {
 
     public static void main(String[] args) {
-        //sentinel to control flow
-        boolean sentinel = true;
-        //keeps looping if there are errors from user input
-        while (sentinel == true) {
-            //prompt user for website to scrape
-            String site = promptUserForSite().trim();
-            sentinel = handleInput(site);
-        }
+        //get website to scrape from user
+        String website = askUserForWebsite();
+        //build scraper object with input
+        Scraper scraper = new Scraper(website);
+        //scrape site and save links
+        scraper.saveLinks();
+        System.out.println("Website has been scraped, program shutting down");
     }
 
-    public static String promptUserForSite() {
-        //create scanner to read terminal input
-        Scanner in = new Scanner(System.in);
-        //print message
-        System.out.println("*************************************************");
-        System.out.println("To Exit just enter exit...otherwise");
-        System.out.println("Please enter the website to scrape..example: www.example.com");
-        //get input from user
-        String returnString = in.nextLine();
-        //return input as string
+    private static String askUserForWebsite() {
+        String returnString;
+        Scanner scan = new Scanner(System.in);
+        do {//keeps looping until no errors with user input
+            System.out.println("");
+            System.out.println("Please enter the address of the website to scrape");
+            System.out.println("example: www.google.com");
+            returnString = scan.nextLine();
+        } while (!checkUserInput(returnString));
         return returnString;
     }
 
-    public static boolean handleInput(String site) {
-        //if input is exit, turn off loop by returning false
-        if (site.equalsIgnoreCase("exit")) {
-            System.out.println("shutting down program...");
-            return false;//<--signal sentinel to exit loop
-        } else if (site.equals("")) {
-            return true;//<--signal sentinel to keep looping
-        } else {//else scrape website
-            System.out.println("Scrapping site now...");
-            Scraper scraper;
-            scraper = new Scraper("http://" + site);
-            scraper.saveLinks();
-            return true;//<--signal sentinel to keep looping
+    private static boolean checkUserInput(String i) {
+        try {//validate user input
+            URL url = new URL("http://" + i);
+            URLConnection con = url.openConnection();
+            return con.getContentType().startsWith("text/html");
+        } catch (Exception e) {
+            return false;
         }
     }
 }
