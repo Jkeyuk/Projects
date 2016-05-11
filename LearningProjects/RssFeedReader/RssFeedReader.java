@@ -37,7 +37,7 @@ public class RssFeedReader {
 
     //displays feed in terminal window
     public void displayFeed() {
-        //get node list from url stream boolean to control user input flow
+        //get node list from url stream 
         getNodeList();
         //make sure rss items were loaded
         if (rssItems != null) {
