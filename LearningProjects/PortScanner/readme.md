@@ -2,4 +2,4 @@ This application asks the user for an IP address, and then a range of ports to s
 
 added concurrency to this application. the application now runs 2 seperate threads. the first thread scans the first half of the port ranges, and the second half of the port ranges is scanned by the second thread.
 
-This project help me learn more of working with concurrency in java. This project also helped me learn more about using regular expressions.
+This project helped me learn more about working with concurrency in java. This project also helped me learn more about using regular expressions.
