@@ -2,8 +2,9 @@ package portscanner;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
-public class PortScanner {
+public class PortScanner implements Runnable {
 
     private final String IP;
     private final String PORT_RANGE;
@@ -13,12 +14,18 @@ public class PortScanner {
         this.PORT_RANGE = PORT_RANGE;
     }
 
-    public void startScanning() {
+    private void startScanning() {
+        ArrayList<Integer> openPorts = new ArrayList<>();
         String[] portRange = PORT_RANGE.split("-");
         int startPort = Integer.parseInt(portRange[0]);
         int endPort = Integer.parseInt(portRange[1]);
         for (int i = startPort; i <= endPort; i++) {
-            System.out.println("is port " + i + " open? " + scan(IP, i));
+            if (scan(IP, i)) {
+                openPorts.add(i);
+            }
+        }
+        for (Integer x : openPorts) {
+            System.out.println("Port " + x + " is open.");
         }
     }
 
@@ -29,5 +36,10 @@ public class PortScanner {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    @Override
+    public void run() {
+        startScanning();
     }
 }
