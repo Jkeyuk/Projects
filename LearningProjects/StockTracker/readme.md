@@ -1,3 +1,3 @@
-This application provides 2 usefull fucntions for the user. 
+This application provides the user with two usefull functions. First it can provide the user with a given company's stock symbol and which exchange the company's  stocks are being traded on. Also this application can provide the user with the stock quote information for a given company.
 
-The user can use this application to search for the stock ticker and exchange for a given company. 
+This application pulls its data from the API provided by http://dev.markitondemand.com.
