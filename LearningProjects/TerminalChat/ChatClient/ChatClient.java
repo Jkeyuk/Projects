@@ -15,27 +15,38 @@ import java.util.logging.Logger;
 
 public class ChatClient {
 
-    private final Socket SOCKET;
     private final String SERVER_ADDRESS;
     private final int SERVER_PORT;
+    private BufferedWriter WRITER;
     private final Executor exec = Executors.newFixedThreadPool(3);
+    private final Scanner SCANNER = new Scanner(System.in);
+    private final Socket SOCKET = new Socket();
 
     public ChatClient(String address, int port) {
         this.SERVER_ADDRESS = address;
         this.SERVER_PORT = port;
-        this.SOCKET = new Socket();
     }
 
     public void connect() {
         try {
             SOCKET.connect(new InetSocketAddress(SERVER_ADDRESS, SERVER_PORT));
-            System.out.println("You are in the chat room, you can start chatting!");
-            System.out.println("To shutdown program type in: !shutdown");
+            WRITER = new BufferedWriter(new OutputStreamWriter(SOCKET.getOutputStream()));
+            printInstructions();
             startListening();
             startTalking();
         } catch (IOException ex) {
             Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void printInstructions() {
+        System.out.println("");
+        System.out.println("*****INSTRUCTIONS*****");
+        System.out.println("at any time, to shutdown program type in: !shutdown");
+        System.out.println("Enter your user name now!!!!!:");
+        sendMessage();
+        System.out.println("Welcome to the chat room");
+        System.out.println("Start Chatting Now");
     }
 
     @SuppressWarnings("SleepWhileInLoop")
@@ -60,27 +71,29 @@ public class ChatClient {
 
     private void startTalking() {
         Runnable talk = () -> {
-            try {
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(SOCKET.getOutputStream()));
-                Scanner s = new Scanner(System.in);
-                while (true) {
-                    String input = s.nextLine();
-                    checkInput(input);
-                    writer.write(input);
-                    writer.newLine();
-                    writer.flush();
-                    writer.write("");
-                    writer.newLine();
-                    writer.flush();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
+            while (true) {
+                sendMessage();
             }
         };
         exec.execute(talk);
     }
-    
-    private void checkInput(String s){
+
+    private void sendMessage() {
+        try {
+            String input = SCANNER.nextLine();
+            checkInput(input);
+            WRITER.write(input);
+            WRITER.newLine();
+            WRITER.flush();
+            WRITER.write("");
+            WRITER.newLine();
+            WRITER.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void checkInput(String s) {
         if (s.equals("!shutdown")) {
             System.out.println("Program shutting down");
             System.exit(0);

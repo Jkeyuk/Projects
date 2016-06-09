@@ -17,20 +17,30 @@ public class ChatConnection implements Runnable {
     private final Socket CLIENT_SOCKET;
     private final BufferedReader IN;
     private final ConcurrentHashMap<String, Socket> CLIENT_LIST;
+    private String USER_NAME;
 
     public ChatConnection(Socket clientSocket, ConcurrentHashMap<String, Socket> clientList)
             throws IOException {
         this.CLIENT_SOCKET = clientSocket;
-        this.IN = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream()));
+        this.IN = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         this.CLIENT_LIST = clientList;
     }
 
     @Override
     public void run() {
         System.out.println("Connection made to " + CLIENT_SOCKET.getInetAddress().toString());
-        CLIENT_LIST.put(CLIENT_SOCKET.getInetAddress().toString(), CLIENT_SOCKET);
+        getUserID();
         startListening();
+    }
+
+    private void getUserID() {
+        try {
+            USER_NAME = IN.readLine();
+            CLIENT_LIST.put(USER_NAME, CLIENT_SOCKET);
+            broadcastMessage(USER_NAME + " Has entered the chat room");
+        } catch (IOException ex) {
+            Logger.getLogger(ChatConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @SuppressWarnings("SleepWhileInLoop")
@@ -39,13 +49,12 @@ public class ChatConnection implements Runnable {
             while (true) {
                 String input;
                 while ((input = IN.readLine()).length() != 0) {
-                    broadcastMessage(CLIENT_SOCKET.getInetAddress().toString()
-                            + ": " + input);
+                    broadcastMessage(USER_NAME + ": " + input);
                 }
                 Thread.sleep(1000);
             }
         } catch (SocketException e) {
-            CLIENT_LIST.remove(CLIENT_SOCKET.getInetAddress().toString());
+            CLIENT_LIST.remove(USER_NAME);
         } catch (InterruptedException | IOException ex) {
             Logger.getLogger(ChatConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
