@@ -17,10 +17,10 @@ public class ChatClient {
 
     private final String SERVER_ADDRESS;
     private final int SERVER_PORT;
-    private BufferedWriter WRITER;
     private final Executor exec = Executors.newFixedThreadPool(3);
     private final Scanner SCANNER = new Scanner(System.in);
     private final Socket SOCKET = new Socket();
+    private BufferedWriter writer;
 
     public ChatClient(String address, int port) {
         this.SERVER_ADDRESS = address;
@@ -30,8 +30,8 @@ public class ChatClient {
     public void connect() {
         try {
             SOCKET.connect(new InetSocketAddress(SERVER_ADDRESS, SERVER_PORT));
-            WRITER = new BufferedWriter(new OutputStreamWriter(SOCKET.getOutputStream()));
-            printInstructions();
+            writer = new BufferedWriter(new OutputStreamWriter(SOCKET.getOutputStream()));
+            initializeUserID();
             startListening();
             startTalking();
         } catch (IOException ex) {
@@ -39,7 +39,7 @@ public class ChatClient {
         }
     }
 
-    private void printInstructions() {
+    private void initializeUserID() {
         System.out.println("");
         System.out.println("*****INSTRUCTIONS*****");
         System.out.println("at any time, to shutdown program type in: !shutdown");
@@ -82,12 +82,12 @@ public class ChatClient {
         try {
             String input = SCANNER.nextLine();
             checkInput(input);
-            WRITER.write(input);
-            WRITER.newLine();
-            WRITER.flush();
-            WRITER.write("");
-            WRITER.newLine();
-            WRITER.flush();
+            writer.write(input);
+            writer.newLine();
+            writer.flush();
+            writer.write("");
+            writer.newLine();
+            writer.flush();
         } catch (IOException ex) {
             Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
         }
