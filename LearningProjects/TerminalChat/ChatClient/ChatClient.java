@@ -17,7 +17,7 @@ public class ChatClient {
 
     private final String SERVER_ADDRESS;
     private final int SERVER_PORT;
-    private final Executor exec = Executors.newFixedThreadPool(3);
+    private final Executor EXEC = Executors.newFixedThreadPool(3);
     private final Scanner SCANNER = new Scanner(System.in);
     private final Socket SOCKET = new Socket();
     private BufferedWriter writer;
@@ -66,7 +66,7 @@ public class ChatClient {
                 System.exit(0);
             }
         };
-        exec.execute(listen);
+        EXEC.execute(listen);
     }
 
     private void startTalking() {
@@ -75,7 +75,7 @@ public class ChatClient {
                 sendMessage();
             }
         };
-        exec.execute(talk);
+        EXEC.execute(talk);
     }
 
     private void sendMessage() {
