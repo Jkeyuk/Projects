@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -17,7 +16,7 @@ public class ChatConnection implements Runnable {
     private final Socket CLIENT_SOCKET;
     private final BufferedReader IN;
     private final ConcurrentHashMap<String, Socket> CLIENT_LIST;
-    private String USER_NAME;
+    private String userName;
 
     public ChatConnection(Socket clientSocket, ConcurrentHashMap<String, Socket> clientList)
             throws IOException {
@@ -28,35 +27,33 @@ public class ChatConnection implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Connection made to " + CLIENT_SOCKET.getInetAddress().toString());
-        getUserID();
-        startListening();
-    }
-
-    private void getUserID() {
         try {
-            USER_NAME = IN.readLine();
-            CLIENT_LIST.put(USER_NAME, CLIENT_SOCKET);
-            broadcastMessage(USER_NAME + " Has entered the chat room");
-        } catch (IOException ex) {
-            Logger.getLogger(ChatConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Connection made to " + CLIENT_SOCKET.getInetAddress().toString());
+            getUserID();
+            startListening();
+        } catch (IOException | InterruptedException ex) {
+            System.out.println(CLIENT_SOCKET.getInetAddress().toString() + " has disconnected");
+            if (CLIENT_LIST.containsValue(CLIENT_SOCKET)) {
+                CLIENT_LIST.remove(userName);
+                broadcastMessage(userName + " Has left the chat room");
+            }
         }
     }
 
+    private void getUserID() throws IOException {
+        userName = IN.readLine();
+        CLIENT_LIST.put(userName, CLIENT_SOCKET);
+        broadcastMessage(userName + " Has entered the chat room");
+    }
+
     @SuppressWarnings("SleepWhileInLoop")
-    private void startListening() {
-        try {
-            while (true) {
-                String input;
-                while ((input = IN.readLine()).length() != 0) {
-                    broadcastMessage(USER_NAME + ": " + input);
-                }
-                Thread.sleep(1000);
+    private void startListening() throws IOException, InterruptedException {
+        while (true) {
+            String input;
+            while ((input = IN.readLine()).length() != 0) {
+                broadcastMessage(userName + ": " + input);
             }
-        } catch (SocketException e) {
-            CLIENT_LIST.remove(USER_NAME);
-        } catch (InterruptedException | IOException ex) {
-            Logger.getLogger(ChatConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Thread.sleep(1000);
         }
     }
 
