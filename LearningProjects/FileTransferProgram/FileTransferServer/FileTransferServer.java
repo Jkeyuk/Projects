@@ -1,5 +1,9 @@
 package filetransferserver;
 
+/**
+ * File transfer server accepts connections from clients to upload, download,
+ * view, and remove files.
+ */
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -17,6 +21,7 @@ final class FileTransferServer {
     private ServerSocket serverSocket;
     private String workingDirectory;
 
+    //set working directory, then start server and listend for shutdown in seperate threads
     public static void main(String[] args) {
         FileTransferServer server = new FileTransferServer();
         server.setWorkingDirectory();
@@ -24,6 +29,7 @@ final class FileTransferServer {
         server.listenForShutdown();
     }
 
+    //prompt user to set working directory for server
     private void setWorkingDirectory() {
         String input;
         do {
@@ -33,6 +39,7 @@ final class FileTransferServer {
         workingDirectory = input;
     }
 
+    //opens socket, waits for connection, creates new thread for each connection
     private void startServer() {
         Runnable serverStart = () -> {
             try {
@@ -49,6 +56,7 @@ final class FileTransferServer {
         EXEC.execute(serverStart);
     }
 
+    //awaits shutdown command from user
     private void listenForShutdown() {
         Runnable shutdownListener = () -> {
             System.out.println("To shutdown server type in: !shutdown");
