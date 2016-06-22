@@ -1,197 +1,72 @@
 package filetransferserver;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+/**
+ * File transfer server accepts connections from clients to upload, download,
+ * view, and remove files.
+ */
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-final class Connection implements Runnable {
+final class FileTransferServer {
 
-    private final Socket CLIENT_SOCKET;
-    private final File WORKING_DIRECTORY;
-    private final RequestHandler HANDLER = new RequestHandler();
-    private DataInputStream input;
-    private DataOutputStream output;
+    private final ExecutorService EXEC = Executors.newFixedThreadPool(100);
+    private final Scanner SCAN = new Scanner(System.in);
+    private ServerSocket serverSocket;
+    private String workingDirectory;
 
-    public Connection(Socket client, String directory) {
-        this.CLIENT_SOCKET = client;
-        this.WORKING_DIRECTORY = new File(directory);
+    //set working directory, then start server and listend for shutdown in seperate threads
+    public static void main(String[] args) {
+        FileTransferServer server = new FileTransferServer();
+        server.setWorkingDirectory();
+        server.startServer();
+        server.listenForShutdown();
     }
 
-    @Override
-    public void run() {
-        System.out.println("Connection made to " + CLIENT_SOCKET.getInetAddress().toString());
-        initializeConnection();
-        startListening();
+    //prompt user to set working directory for server
+    private void setWorkingDirectory() {
+        String input;
+        do {
+            System.out.println("Plese enter the working directory for the server");
+            input = SCAN.nextLine().trim();
+        } while (!new File(input).isDirectory());
+        workingDirectory = input;
     }
 
-    private void initializeConnection() {
-        try {
-            input = new DataInputStream(CLIENT_SOCKET.getInputStream());
-            output = new DataOutputStream(CLIENT_SOCKET.getOutputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void startListening() {
-        try {
-            while (true) {
-                String incoming;
-                while ((incoming = input.readUTF()) != null) {
-                    HANDLER.handleRequest(incoming.trim());
-                }
-            }
-        } catch (IOException ex) {
-            System.out.println(CLIENT_SOCKET.getInetAddress().toString() + " has discconected");
-        }
-    }
-
-    private final class RequestHandler {
-
-        private synchronized void handleRequest(String request) {
-            if (request.equalsIgnoreCase("!showFiles")) {
-                File[] listOfFiles = WORKING_DIRECTORY.listFiles();
-                sendMessage("----------------------------------------");
-                sendMessage("Files in the working directory:");
-                displayFiles(listOfFiles);
-            } else if (request.startsWith("!openFolder")) {
-                openFolder(request);
-            } else if (request.startsWith("!delete")) {
-                delete(request);
-            } else if (request.startsWith("!sendFile")) {
-                handleFileRequest(request);
-            } else if (request.startsWith("!uploading")) {
-                recieveFile(request);
-            } else {
-                sendMessage("Not a valid command");
-            }
-        }
-
-        private void displayFiles(File[] listOfFiles) {
-            for (File file : listOfFiles) {
-                if (file.isDirectory()) {
-                    sendMessage(file.getName() + "(Folder)");
-                } else {
-                    sendMessage(file.getName());
-                }
-            }
-        }
-
-        private void openFolder(String request) {
-            String[] array = request.split(" ");
-            if (array.length > 1) {
-                File folder = new File(WORKING_DIRECTORY.getAbsolutePath()
-                        + File.separator + array[1]);
-                if (folder.isDirectory() && isRequestValid(array[1])) {
-                    File[] fileList = folder.listFiles();
-                    sendMessage("----------------------------------------");
-                    sendMessage("Files in the Folder: " + array[1]);
-                    displayFiles(fileList);
-                } else {
-                    sendMessage("That folder does not exsist, check folder name");
-                }
-            } else {
-                sendMessage("You did not specify the folder to open");
-            }
-        }
-
-        private void delete(String request) {
-            String[] array = request.split(" ");
-            if (array.length > 1) {
-                File file = new File(WORKING_DIRECTORY.getAbsolutePath()
-                        + File.separator + array[1]);
-                if (file.exists() && isRequestValid(array[1])) {
-                    removeFile(file);
-                } else {
-                    sendMessage("Cannot delete");
-                }
-            } else {
-                sendMessage("You did not specify what to delete");
-            }
-        }
-
-        private void removeFile(File file) {
-            if (file.isDirectory()) {
-                File[] list = file.listFiles();
-                for (File f : list) {
-                    removeFile(f);
-                }
-                file.delete();
-            } else {
-                file.delete();
-            }
-            sendMessage(file.getName() + " removed");
-        }
-
-        private void handleFileRequest(String request) {
-            String[] array = request.split(" ");
-            if (array.length > 1) {
-                File file = new File(WORKING_DIRECTORY.getAbsolutePath()
-                        + File.separator + array[1]);
-                if (file.isFile() && isRequestValid(array[1])) {
-                    sendMessage("!sendingFile " + file.getName());
-                    sendFile(file);
-                } else {
-                    sendMessage("Check file name and try again");
-                }
-            } else {
-                sendMessage("You did not specify what file to send");
-            }
-        }
-
-        private void sendFile(File file) {
-            try (FileInputStream fis = new FileInputStream(file)) {
-                output.writeLong(file.length());
-                int read;
-                byte[] buff = new byte[1024];
-                while ((read = fis.read(buff)) > 0) {
-                    output.write(buff, 0, read);
-                }
-                output.flush();
-            } catch (IOException ex) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        private void recieveFile(String message) {
-            String[] array = message.split(" ");
-            if (array.length > 1) {
-                File file = new File(WORKING_DIRECTORY.getAbsolutePath()
-                        + File.separator + array[1]);
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    file.createNewFile();
-                    int read;
-                    byte[] buff = new byte[1024];
-                    long numOfBytes = input.readLong();
-                    while (numOfBytes > 0) {
-                        read = input.read(buff);
-                        numOfBytes -= read;
-                        fos.write(buff, 0, read);
-                    }
-                    System.out.println("File Recieved");
-                } catch (IOException ex) {
-                    Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-
-        private void sendMessage(String m) {
+    //opens socket, waits for connection, creates new thread for each connection
+    private void startServer() {
+        Runnable serverStart = () -> {
             try {
-                output.writeUTF(m);
-                output.flush();
+                serverSocket = new ServerSocket(0);
+                System.out.println("Server started on port: " + serverSocket.getLocalPort());
+                while (true) {
+                    Socket clientSock = serverSocket.accept();
+                    EXEC.execute(new Connection(clientSock, workingDirectory));
+                }
             } catch (IOException ex) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FileTransferServer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        };
+        EXEC.execute(serverStart);
+    }
 
-        private boolean isRequestValid(String r) {
-            return !(r.contains("/..") || r.contains("\\.."));
-        }
+    //awaits shutdown command from user
+    private void listenForShutdown() {
+        Runnable shutdownListener = () -> {
+            System.out.println("To shutdown server type in: !shutdown");
+            while (true) {
+                String input = SCAN.nextLine();
+                if (input.equalsIgnoreCase("!shutdown")) {
+                    System.exit(0);
+                }
+            }
+        };
+        EXEC.execute(shutdownListener);
     }
 }
