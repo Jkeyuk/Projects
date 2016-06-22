@@ -1,5 +1,10 @@
 package filetransferclient;
 
+/**
+ * File Transfer Client allows users to connect to the file transfer server.
+ * Users can view files on the server, remove file, upload files, and download
+ * files
+ */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -24,11 +29,20 @@ final class FileTransferClient {
     private DataOutputStream output;
     private DataInputStream input;
 
+    /**
+     * @param SERVER_ADDRESS -address to connect to
+     * @param SERVER_PORT - port number to connect to
+     */
     public FileTransferClient(String SERVER_ADDRESS, int SERVER_PORT) {
         this.SERVER_ADDRESS = SERVER_ADDRESS;
         this.SERVER_PORT = SERVER_PORT;
     }
 
+    /**
+     * Main method which prompts user for IP and port to connect too.
+     *
+     * @param args - does nothing
+     */
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         System.out.println("Enter ip of server");
@@ -39,6 +53,9 @@ final class FileTransferClient {
         client.connect();
     }
 
+    /**
+     * Starts the connection to server
+     */
     private void connect() {
         try {
             SOCKET.connect(new InetSocketAddress(SERVER_ADDRESS, SERVER_PORT));
@@ -52,6 +69,9 @@ final class FileTransferClient {
         }
     }
 
+    /**
+     * awaits commands from the user, ran in its own thread.
+     */
     private void startTalking() {
         Runnable talk = () -> {
             while (true) {
@@ -61,6 +81,9 @@ final class FileTransferClient {
         EXEC.execute(talk);
     }
 
+    /**
+     * Listens over the network for the response from the server
+     */
     private void startListening() {
         Runnable listen = () -> {
             try {
@@ -84,6 +107,11 @@ final class FileTransferClient {
         EXEC.execute(listen);
     }
 
+    /**
+     * receives files downloaded from server
+     *
+     * @param message - download message giving name of file downloaded
+     */
     private void recieveFile(String message) {
         String[] array = message.split(" ");
         if (array.length > 1) {
@@ -105,6 +133,11 @@ final class FileTransferClient {
         }
     }
 
+    /**
+     * Prepares file to upload to the server
+     *
+     * @param message -upload message giving name of file to upload
+     */
     private void handleUpload(String message) {
         String[] array = message.split(" ");
         if (array.length > 1) {
@@ -120,6 +153,11 @@ final class FileTransferClient {
         }
     }
 
+    /**
+     * Sends file over network to server
+     *
+     * @param file -file to send to server
+     */
     private void sendFile(File file) {
         try (FileInputStream fis = new FileInputStream(file)) {
             output.writeLong(file.length());
@@ -135,6 +173,9 @@ final class FileTransferClient {
         }
     }
 
+    /**
+     * Checks input from user to handle appropriate commands
+     */
     private void checkUserInput() {
         String message = SCANNER.nextLine();
         if (message.equalsIgnoreCase("!shutdown")) {
@@ -146,6 +187,11 @@ final class FileTransferClient {
         }
     }
 
+    /**
+     * sends message as string to the server
+     *
+     * @param m - message to send
+     */
     private void sendMessage(String m) {
         try {
             output.writeUTF(m);
