@@ -2,5 +2,5 @@
 
 Repository of java source code
 
-Courses taken so far
+Courses taken so far \n
 Harvard CS50 - Introduction to computer science
