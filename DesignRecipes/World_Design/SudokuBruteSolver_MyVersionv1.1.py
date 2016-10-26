@@ -42,7 +42,7 @@ BOARD_1 = [B,B,B,B,B,B,B,B,B,
            B,B,B,B,B,B,B,B,B,
            B,B,B,B,B,B,B,B,B]
 
-#easy puzzle
+# puzzles for testing
 EASY_BOARD = [7,3,B,B,B,5,B,B,B,
               B,4,B,B,6,B,B,B,B,
               B,B,1,B,B,9,B,5,B,
@@ -62,6 +62,37 @@ EASY_SOLUTION = [7,3,2,8,1,5,9,4,6,
                  3,8,4,9,7,2,6,1,5,
                  6,9,7,1,5,4,2,8,3,
                  1,2,5,6,3,8,4,7,9]
+
+
+EASY_BOARD2 = [B,B,B,2,6,B,7,B,1,
+               6,8,B,B,7,B,B,9,B,
+               1,9,B,B,B,4,5,B,B,
+               8,2,B,1,B,B,B,4,B,
+               B,B,4,6,B,2,9,B,B,
+               B,5,B,B,B,3,B,2,8,
+               B,B,9,3,B,B,B,7,4,
+               B,4,B,B,5,B,B,3,6,
+               7,B,3,B,1,8,B,B,B]
+
+EASY_SOLUTION2 = [4,3,5,2,6,9,7,8,1, 
+                  6,8,2,5,7,1,4,9,3,
+                  1,9,7,8,3,4,5,6,2, 
+                  8,2,6,1,9,5,3,4,7, 
+                  3,7,4,6,8,2,9,1,5, 
+                  9,5,1,7,4,3,6,2,8, 
+                  5,1,9,3,2,6,8,7,4, 
+                  2,4,8,9,5,7,1,3,6, 
+                  7,6,3,4,1,8,2,5,9,]
+
+UNSOLVABLE = [1,2,3,4,5,6,7,8,B,
+              B,B,B,B,B,B,B,B,2,
+              B,B,B,B,B,B,B,B,3,
+              B,B,B,B,B,B,B,B,4,
+              B,B,B,B,B,B,B,B,5,
+              B,B,B,B,B,B,B,B,6,
+              B,B,B,B,B,B,B,B,7,
+              B,B,B,B,B,B,B,B,8,
+              B,B,B,B,B,B,B,B,9]
 
 #UNITS. position of all rows, columns, and boxes
 ROWS = [[ 0,  1,  2,  3,  4,  5,  6,  7,  8],
@@ -100,17 +131,24 @@ BOXES = [[ 0, 1, 2, 9,10,11,18,19,20],
 ##==================================
 ## Functions
 
-## Board -> Board???????
-## Given a board, returns the solution to the board
+## Board -> Board
+## Given a board, returns the solution to the board or empty array if no solution
 
 def sudokuSolver(b):
-   if b.count(False) == 0:
-       return b
-   else:
-       n = filter_invalid(NextSetOfBoards(b))
-       for t in n:
-           sudokuSolver(t)
+   ValidSet = filter_invalid(NextSetOfBoards(b))
+   
+   while True:
+      if not ValidSet:
+         return []
+      
+      newSets = []
+      for board in ValidSet:
+         if board.count(False)==0:
+            return board
+         else:
+            newSets += filter_invalid(NextSetOfBoards(board))
 
+      ValidSet = newSets
 
 
 ## Board -> ListOf Boards
@@ -130,6 +168,7 @@ def NextSetOfBoards(b):
 
 ## ListOf Boards -> ListOf Boards
 ## Given a list of board, produces a new list with invalid boards filtered out.
+## If no valid boards are given, produces empty list.
 
 def filter_invalid(lob):
     newList = []
@@ -138,51 +177,56 @@ def filter_invalid(lob):
             newList.append(b)
     return newList
 
-## Board -> Boolean ???
+## Board -> Boolean
 ## returns False if a Value occurs more then once in a given boards row.
+##   Otherwise returns True.
 
 def checkRows(b):
     global ROWS
     for row in ROWS:
-        temp = [b[i] for i in row]
-        for v in temp:
+        RowValues = [b[i] for i in row]
+        for v in RowValues:
             if v:
-                if temp.count(v) > 1:
+                if RowValues.count(v) > 1:
                     return False
     return True
 
-## Board -> Boolean ???
+## Board -> Boolean
 ## returns False if a Value occurs more then once in a given boards collumn.
+##   Otherwise returns True.
 
 def checkCols(b):
     global COLS
     for col in COLS:
-        temp = [b[i] for i in col]
-        for v in temp:
+        ColValues = [b[i] for i in col]
+        for v in ColValues:
             if v:
-                if temp.count(v) > 1:
+                if ColValues.count(v) > 1:
                     return False
     return True
 
-## Board -> Boolean ???
+## Board -> Boolean
 ## returns False if a Value occurs more then once in a given boards boxes.
+##   Otherwise returns True.
 
 def checkBoxes(b):
     global BOXES
     for box in BOXES:
-        temp = [b[i] for i in box]
-        for v in temp:
+        BoxValues = [b[i] for i in box]
+        for v in BoxValues:
             if v:
-                if temp.count(v) > 1:
+                if BoxValues.count(v) > 1:
                     return False
     return True
 
 
-## Board -> displays board to console
+## Board -> displays board to console for testing
 ## produces a display of a given board to be more readable.
 
 def display(b):
     print()
+    if not b:
+       return print('no solution')
     for i in range(len(b)):
         if not b[i]:
             x = 'B'
@@ -195,6 +239,9 @@ def display(b):
             print(x, end=' ')
     print()
 
+assert sudokuSolver(UNSOLVABLE) == []
+assert sudokuSolver(EASY_BOARD) == EASY_SOLUTION
+assert sudokuSolver(EASY_BOARD2) == EASY_SOLUTION2
 
-display(sudokuSolver(EASY_BOARD))
+print('all tests passed')
 
