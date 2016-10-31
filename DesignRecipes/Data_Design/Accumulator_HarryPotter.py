@@ -92,17 +92,56 @@ recursive.
 
 def NumOfWiz(wiz):
     def fn_for_wizardd(w, num):
-        return num + fn_for_low(w.children, num)
+        return fn_for_low(w.children, num + 1)
         
     def fn_for_low(low, num):
         if not low:
-            return 0
+            return num
         else:
-            return fn_for_wizardd(low[0], num + fn_for_low(low[1:], num))
-        
-    return fn_for_wizardd(wiz, 1)
+            return fn_for_wizardd(low[0], fn_for_low(low[1:], num)) 
+            
+
+    return fn_for_wizardd(wiz, 0)
 
 assert NumOfWiz(AlbusPotter) == 1
 assert NumOfWiz(HarryPotter) == 4
 assert NumOfWiz(JamesPotter) == 5
 print('number of wizards test passed')
+
+'''
+Design a function that consumes a wizard and produces the names of every
+wizard in the tree that was placed in the same house as their immediate
+parent. same as the first function we did but this function must be tail
+recursive.
+'''
+
+## Wizard -> list of strings
+## consumes a wizard and produces the names of every wizard in the tree that
+## was placed in the same house as their immediate parent.
+
+def SameHouseAsParent(wiz):
+    #ph is house of immediate parent as string
+    #rsf is result so far accumulator
+    #todo is a [List of [wizard,ph]] worklist accumulator
+    def fn_for_wizardd(w, ph, todo, rsf):
+        todo = todo + [[wizz, w.house] for wizz in w.children]
+
+        if ph == w.house:         
+            return fn_for_low(todo, rsf + [w.name])
+        else:
+            return fn_for_low(todo, rsf)
+        
+    def fn_for_low(todo, rsf):
+        if not todo:
+            return rsf
+        else:
+            return fn_for_wizardd(todo[0][0], todo[0][1], todo[1:], rsf) 
+                   
+            
+    return fn_for_wizardd(wiz, '', [], [])
+
+assert SameHouseAsParent(AlbusPotter) == []
+assert SameHouseAsParent(JamesPotter) == ['Harry Potter','James Potter II',
+                                          'Lily Potter II']
+assert SameHouseAsParent(HarryPotter) == ['James Potter II','Lily Potter II']
+print('same house with tail recursion tests passed')
