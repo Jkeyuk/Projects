@@ -8,4 +8,4 @@ Harvard CS50 - Introduction to computer science
 
 Udacity - Design of computer programs, Dr. Peter Norvig
 
-EDX - How to Code: Systematic Program Design - Part 1
+EDX - How to Code: Systematic Program Design - Part 1 , Part 2, and Part 3
