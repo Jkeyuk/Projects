@@ -1,34 +1,39 @@
-package wordcounter;
+package CountWordsInTextFile;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WordCounter {
 
-    private final String fileLocation;
+	private final String fileLocation;
 
-    public WordCounter(String fileLocation) {
-        this.fileLocation = fileLocation;
-    }
+	public WordCounter(String fileLocation) {
+		this.fileLocation = fileLocation;
+	}
 
-    public void count() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(fileLocation)))) {
-            String input;
-            String data = "";
-            while ((input = reader.readLine()) != null) {
-                data += input + " ";
-            }
-            String[] arrayOfWords = data.split(" ");
-            System.out.println("Number of words = " + arrayOfWords.length);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(WordCounter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(WordCounter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	public int count() {
+		return getWordsFromFile().size();
+	}
+
+	private List<String> getWordsFromFile() {
+		List<String> data = new LinkedList<>(Arrays.asList(fileDataToString().split(" ")));
+		data.removeIf(w -> w.length() < 1);
+		return data;
+	}
+
+	private String fileDataToString() {
+		String dataString = "";
+		try {
+			List<String> data = Files.readAllLines(new File(fileLocation).toPath());
+			for (String string : data) {
+				dataString += string + " ";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataString;
+	}
 }
