@@ -1,4 +1,4 @@
-package rssfeedreader;
+package RssFeedReader;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -7,8 +7,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,26 +18,22 @@ import org.xml.sax.SAXException;
 
 public class RssFeedReader {
 
-    //url object to hold URL to rss feed
     private URL url;
-    //NodeList of rss nodes
-    private NodeList rssItems;
-    //links gathered from rss feed items
     private ArrayList<String> links = new ArrayList<>();
 
     public RssFeedReader(String url) {
-        try {//try to create url object with string to rss feed
+        try {
             this.url = new URL("http://" + url);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
     //displays feed in terminal window
     public void displayFeed() {
         //get node list from url stream 
-        getNodeList();
-        //make sure rss items were loaded
+    	NodeList rssItems = getNodeList();
+        //make sure RSS items were loaded
         if (rssItems != null) {
             //for each items node display title, description, and link
             for (int i = 0; i < rssItems.getLength(); i++) {
@@ -64,8 +58,9 @@ public class RssFeedReader {
         }
     }
 
-    //get node list from url stream
-    private void getNodeList() {
+    //returns node list from RSS URL
+    private NodeList getNodeList() {
+    	NodeList rssItems = null;
         try {//build document factory
             DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
             //make document builder
@@ -76,11 +71,12 @@ public class RssFeedReader {
             doc.getDocumentElement().normalize();
             //extract root element from document
             Element root = doc.getDocumentElement();
-            //get nodelist of items
+            //get node list of items
             rssItems = root.getElementsByTagName("item");
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
+        return rssItems;
     }
 
     //display title, description, and link from nodes
@@ -102,7 +98,7 @@ public class RssFeedReader {
                 try {//try to open browser with selected link
                     Desktop.getDesktop().browse(new URI(links.get(num - 1)));
                 } catch (IOException | URISyntaxException ex) {
-                    Logger.getLogger(RssFeedReader.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
             } else {//if not supported print sorry message
                 System.out.println("System does not support this...Sorry :(");

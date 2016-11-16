@@ -1,4 +1,4 @@
-package texttohtml;
+package TextToHTML;
 
 import java.io.File;
 import java.util.Scanner;
@@ -6,8 +6,7 @@ import java.util.Scanner;
 public class TextToHTMLApp {
 
     public static void main(String[] args) {
-        String sourceDocument = getSourceDoc();
-        TextToHTML converter = new TextToHTML(sourceDocument);
+        TextToHTML converter = new TextToHTML(getSourceDoc());
         System.out.println("Converting file now....");
         converter.makeHtmlFile();
         System.out.println("Program done.");
@@ -21,6 +20,7 @@ public class TextToHTMLApp {
             System.out.println("Drag and drop, or enter path to text file");
             input = scanner.nextLine().trim();
         } while (!new File(input).isFile());
+        scanner.close();
         return input;
     }
 }

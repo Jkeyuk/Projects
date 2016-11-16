@@ -1,5 +1,11 @@
-This application asks the user for an IP address, and then a range of ports to scan. The application then scans each port withing range at the given IP address. When done the application will show which ports are open.
+This application scans the given ports at a given IP address.
 
-added concurrency to this application. the application now runs 2 seperate threads. the first thread scans the first half of the port ranges, and the second half of the port ranges is scanned by the second thread.
+Usage:
 
-This project helped me learn more about working with concurrency in java. This project also helped me learn more about using regular expressions.
+Java PortScannerMain (IP) (Starting_port) (Ending_port)
+
+Example:
+
+Java PortScannerMain 127.0.0.1 70 100
+
+This will scan ports 70 up to and including port 100.
