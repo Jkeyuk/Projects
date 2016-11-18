@@ -1,4 +1,4 @@
-package webscraper;
+package WebScraper;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -25,6 +25,7 @@ public class WebScraperMain {
             System.out.println("example: www.google.com");
             returnString = scan.nextLine();
         } while (!checkUserInput(returnString));
+        scan.close();
         return returnString;
     }
 
