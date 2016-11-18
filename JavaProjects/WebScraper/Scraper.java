@@ -23,7 +23,6 @@ public class Scraper {
 	public Scraper(String url) {
 		try {
 			this.url = new URL("http://" + url);
-			;
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(Scraper.class.getName()).log(Level.SEVERE, null, ex);
 		}
