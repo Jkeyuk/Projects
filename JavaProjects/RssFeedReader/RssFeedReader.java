@@ -18,93 +18,82 @@ import org.xml.sax.SAXException;
 
 public class RssFeedReader {
 
-    private URL url;
-    private ArrayList<String> links = new ArrayList<>();
+	private URL url;
+	private ArrayList<String> links = new ArrayList<>();
 
-    public RssFeedReader(String url) {
-        try {
-            this.url = new URL("http://" + url);
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        }
-    }
+	public RssFeedReader(String url) {
+		try {
+			this.url = new URL("http://" + url);
+		} catch (MalformedURLException ex) {
+			ex.printStackTrace();
+		}
+	}
 
-    //displays feed in terminal window
-    public void displayFeed() {
-        //get node list from url stream 
-    	NodeList rssItems = getNodeList();
-        //make sure RSS items were loaded
-        if (rssItems != null) {
-            //for each items node display title, description, and link
-            for (int i = 0; i < rssItems.getLength(); i++) {
-                Node node = rssItems.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    //cast node to element
-                    Element e = (Element) node;
-                    //get title element text
-                    String title
-                            = e.getElementsByTagName("title").item(0).getTextContent().trim();
-                    //get description element text
-                    String description
-                            = e.getElementsByTagName("description").item(0).getTextContent().trim();
-                    //get link element text
-                    String link
-                            = e.getElementsByTagName("link").item(0).getTextContent().trim();
-                    links.add(link);//<--add links to array
-                    //display feed number and values
-                    displayValues(i, title, description, link);
-                }
-            }
-        }
-    }
+	// display title, description, and link for each data item.
+	public void displayValues() {
+		ArrayList<String[]> data = parseData(getData());
+		for (String[] strings : data) {
+			System.out.println("------------------------------------------");
+			System.out.println("Feed Item #" + (data.indexOf(strings) + 1));
+			System.out.println();
+			System.out.println("Title: " + strings[0]);
+			System.out.println();
+			System.out.println("Description: " + strings[1]);
+			System.out.println();
+			System.out.println("Link: " + strings[2]);
+		}
+	}
 
-    //returns node list from RSS URL
-    private NodeList getNodeList() {
-    	NodeList rssItems = null;
-        try {//build document factory
-            DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
-            //make document builder
-            DocumentBuilder build = fac.newDocumentBuilder();
-            //build document with builder and url stream
-            Document doc = build.parse(url.openStream());
-            //normalize document
-            doc.getDocumentElement().normalize();
-            //extract root element from document
-            Element root = doc.getDocumentElement();
-            //get node list of items
-            rssItems = root.getElementsByTagName("item");
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            ex.printStackTrace();
-        }
-        return rssItems;
-    }
+	// parses data nodes and returns array of string arrays
+	private ArrayList<String[]> parseData(NodeList rssItems) {
+		ArrayList<String[]> data = new ArrayList<>();
+		if (rssItems != null) {
+			for (int i = 0; i < rssItems.getLength(); i++) {
+				Node node = rssItems.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					String[] values = new String[3];
+					Element e = (Element) node;
+					values[0] = e.getElementsByTagName("title").item(0).getTextContent().trim();
+					values[1] = e.getElementsByTagName("description").item(0).getTextContent().trim();
+					values[2] = e.getElementsByTagName("link").item(0).getTextContent().trim();
+					links.add(values[2]);
+					data.add(values);
+				}
+			}
+		}
+		return data;
+	}
 
-    //display title, description, and link from nodes
-    private void displayValues(int i, String title, String desc, String link) {
-        System.out.println("------------------------------------------");
-        System.out.println("Feed Item #" + (i + 1));
-        System.out.println();
-        System.out.println("Title: " + title);
-        System.out.println();
-        System.out.println("Description: " + desc);
-        System.out.println();
-        System.out.println("Link: " + link);
-    }
+	// returns data nodes from RSS URL
+	private NodeList getData() {
+		NodeList rssItems = null;
+		try {
+			DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
+			DocumentBuilder build = fac.newDocumentBuilder();
+			Document doc = build.parse(url.openStream());
+			doc.getDocumentElement().normalize();
+			Element root = doc.getDocumentElement();
+			rssItems = root.getElementsByTagName("item");
+		} catch (ParserConfigurationException | SAXException | IOException ex) {
+			ex.printStackTrace();
+		}
+		return rssItems;
+	}
 
-    //open browser for user and direct them to desired link
-    public void goToLink(int num) {
-        if (num <= links.size()) {//<--check if user input is valid
-            if (Desktop.isDesktopSupported()) {//<--check if desktop is supported
-                try {//try to open browser with selected link
-                    Desktop.getDesktop().browse(new URI(links.get(num - 1)));
-                } catch (IOException | URISyntaxException ex) {
-                    ex.printStackTrace();
-                }
-            } else {//if not supported print sorry message
-                System.out.println("System does not support this...Sorry :(");
-            }
-        } else {
-            System.out.println("That feed link number does not an exist");
-        }
-    }
+	// open browser for user and direct them to desired link
+	public void goToLink(int num) {
+		if (num <= links.size()) {
+			if (Desktop.isDesktopSupported()) {
+				try {
+					Desktop.getDesktop().browse(new URI(links.get(num - 1)));
+				} catch (IOException | URISyntaxException ex) {
+					ex.printStackTrace();
+				}
+			} else {
+				System.out.println("System does not support this...Sorry :(");
+			}
+		} else {
+			System.out.println("That feed link number does not an exist");
+		}
+	}
 }

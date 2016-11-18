@@ -9,7 +9,7 @@ public class RssFeedReaderMain {
 	public static void main(String[] args) {
 		String rssFeedAddress = askUserForRssAddress();
 		RssFeedReader reader = new RssFeedReader(rssFeedAddress);
-		reader.displayFeed();
+		reader.displayValues();
 		int linkNum = askUserForLinkNum();
 		reader.goToLink(linkNum);
 	}
@@ -34,8 +34,7 @@ public class RssFeedReaderMain {
 			System.out.println("Please enter the Feed item number of the link you wish to visit:");
 			input = scan.nextLine();
 		} while (!checkInt(input));
-		int returnInt = Integer.parseInt(input);
-		return returnInt;
+		return Integer.parseInt(input);
 	}
 
 	private static boolean checkConnection(String s) {
@@ -43,7 +42,7 @@ public class RssFeedReaderMain {
 			URL url = new URL("http://" + s);
 			URLConnection con = url.openConnection();
 			String type = con.getContentType();
-			return type.endsWith("xml");
+			return type.endsWith("xml") || type.contains("text/xml");
 		} catch (Exception e) {
 			return false;
 		}
