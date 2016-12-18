@@ -9,7 +9,7 @@ import java.util.Scanner;
  *         This program requests a text file from the user and displays the
  *         number of words in the file.
  */
-public class WordCounter {
+public class WordCountProgram {
 
 	public static void main(String[] args) {
 		FileWordCounter counter = new FileWordCounter();
