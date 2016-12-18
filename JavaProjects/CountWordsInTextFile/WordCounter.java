@@ -1,39 +1,30 @@
 package CountWordsInTextFile;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Scanner;
 
+/**
+ * @author jonathan
+ * 
+ *         This program requests a text file from the user and displays the
+ *         number of words in the file.
+ */
 public class WordCounter {
 
-	private final String fileLocation;
-
-	public WordCounter(String fileLocation) {
-		this.fileLocation = fileLocation;
+	public static void main(String[] args) {
+		FileWordCounter counter = new FileWordCounter();
+		System.out.println("Word Count = " + counter.countWordsInFile(new File(getFile())));
 	}
 
-	public int count() {
-		return getWordsFromFile().size();
-	}
-
-	private List<String> getWordsFromFile() {
-		List<String> data = new LinkedList<>(Arrays.asList(fileDataToString().split(" ")));
-		data.removeIf(w -> w.length() < 1);
-		return data;
-	}
-
-	private String fileDataToString() {
-		String dataString = "";
-		try {
-			List<String> data = Files.readAllLines(new File(fileLocation).toPath());
-			for (String string : data) {
-				dataString += string + " ";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dataString;
+	private static String getFile() {
+		Scanner s = new Scanner(System.in);
+		String returnS;
+		do {
+			System.out.println("");
+			System.out.println("Please enter path to text file to count:");
+			returnS = s.nextLine();
+		} while (!new File(returnS).isFile());
+		s.close();
+		return returnS;
 	}
 }
