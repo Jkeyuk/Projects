@@ -15,11 +15,9 @@ import java.util.regex.Pattern;
 public class In {
 
 	/**
-	 * Prints a given message to System.out and uses a given Scanner to scan the
-	 * next line of input. If scanned input is valid path to a existing
-	 * directory, a file object representing the directory from this path is
-	 * returned. Otherwise message keeps looping until user enters a valid
-	 * directory path.
+	 * Prompts the user with a given message and waits for the user to input a
+	 * path to a directory. If the inputed string is a valid path to a
+	 * directory, the directory is returned as a File object.
 	 * 
 	 * @param message
 	 *            - string to display to user.
@@ -32,9 +30,8 @@ public class In {
 	}
 
 	/**
-	 * Prints a given message to System.out and uses a given Scanner to scan the
-	 * next line of input. If the scanned line is a valid double, the double is
-	 * returned. Otherwise the message will keep looping.
+	 * Prompts the user with a given message and waits for the user to input a
+	 * double. If the input is a valid double, the double is returned.
 	 * 
 	 * @param message
 	 *            - string to display to user.
@@ -47,10 +44,9 @@ public class In {
 	}
 
 	/**
-	 * Prints a given message to System.out and uses a given Scanner to scan the
-	 * next line of input. If scanned input is valid file path to a existing
-	 * file, a file object representing the file from this path is returned.
-	 * Otherwise message keeps looping until user enters a valid file path.
+	 * * Prompts the user with a given message and waits for the user to input a
+	 * path to a valid file. If the inputed string is a valid path to a file,
+	 * the file is returned as a File object.
 	 * 
 	 * @param message
 	 *            - string to display to user.
@@ -63,9 +59,8 @@ public class In {
 	}
 
 	/**
-	 * Prints a given message to System.out and uses a given Scanner to scan the
-	 * next line of input. If the scanned line is a valid integer, the integer
-	 * is returned. Otherwise the message will keep looping.
+	 * Prompts the user with a given message and waits for the user to input a
+	 * integer. If the input is a valid integer, the integer is returned.
 	 * 
 	 * @param message
 	 *            - string to display to user.
@@ -78,9 +73,9 @@ public class In {
 	}
 
 	/**
-	 * Prints a given message to System.out and uses a given Scanner to scan the
-	 * next line of input. If the scanned line is a valid IP address, the string
-	 * is returned. otherwise keeps looping with message.
+	 * Prompts the user with a given message and waits for the user to input a
+	 * string. If the inputed string is a valid IPv4 address, the string is
+	 * returned.
 	 * 
 	 * @param message
 	 *            - string to display to user.
@@ -108,8 +103,9 @@ public class In {
 	}
 
 	/**
-	 * Prints a given message to System.out until the user inputs a valid input
-	 * which passes a given predicate.
+	 * Prompts the user with a given message and waits for the user to input a
+	 * string. If the input is a passes the given predicate, the string is
+	 * returned.
 	 * 
 	 * @param message
 	 *            - string to display to user.
