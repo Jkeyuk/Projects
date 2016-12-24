@@ -4,8 +4,8 @@ This project was started to help me understand reading from files, writing to fi
 
 Usage:
 
-java CSVFileSorterApp [Path to File]
+java CSVFileSorter.Main [Path to File]
 
 Example:
 
-java CSVFileSorterApp test.csv
+java CSVFileSorter.Main test.csv

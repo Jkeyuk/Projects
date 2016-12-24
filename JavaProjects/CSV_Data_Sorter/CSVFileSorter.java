@@ -1,72 +1,91 @@
+package CSV_Data_Sorter;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ * This class is used to sort numerical or textual data in a CSV file. sorted
+ * data is written back to the file.
+ * 
+ * @author Jonathan
+ *
+ */
 public class CSVFileSorter {
 
-	private final File file;
-	private int rowSize = 0;
+	private final CSVFile file;
 
-	public CSVFileSorter(String fileName) {
-		this.file = new File(fileName);
+	/**
+	 * Constructs file sorter with CSV file.
+	 * 
+	 * @param file-
+	 *            file to sort
+	 */
+	public CSVFileSorter(CSVFile file) {
+		this.file = file;
 	}
 
+	/**
+	 * Sorts numerical data from a CSV file and writes data back to file.
+	 */
 	public void sortNumericalData() {
-		ArrayList<String> fileData = returnFileData();
-		ArrayList<Double> numberList = new ArrayList<>();
-		for (String string : fileData) {
-			numberList.add(Double.parseDouble(string));
-		}
-		numberList.sort(null);
-		fileData.clear();
-		for (Double y : numberList) {
-			fileData.add(y.toString());
-		}	
-		writeDataToFile(fileData);
+		ArrayList<String> data = file.getFileData();
+		int rowSize = data.get(0).split(",").length;
+		ArrayList<Double> numbers = parseNumbers(data);
+		numbers.sort(null);
+		file.writeDataToFile(buildFileData(numbers, rowSize));
 	}
 
+	/**
+	 * Parses an ArrayList of strings with comma separated values, and returns
+	 * the values as an ArrayList of doubles.
+	 * 
+	 * @param data
+	 *            - ArrayList of strings to parse
+	 * @return An ArrayList of doubles with the values that were parsed.
+	 */
+	private ArrayList<Double> parseNumbers(ArrayList<String> data) {
+		ArrayList<String> values = new ArrayList<>();
+		data.forEach(x -> values.addAll(Arrays.asList(x.split(","))));
+		ArrayList<Double> numbers = new ArrayList<>();
+		values.forEach(x -> numbers.add(Double.parseDouble(x)));
+		return numbers;
+	}
+
+	/**
+	 * Sorts textual data in the CSV file and writes data back to file.
+	 */
 	public void sortTextualData() {
-		ArrayList<String> fileData = returnFileData();
-		fileData.sort(null);
-		writeDataToFile(fileData);
+		ArrayList<String> data = file.getFileData();
+		int rowSize = data.get(0).split(",").length;
+		ArrayList<String> values = new ArrayList<>();
+		data.forEach(x -> values.addAll(Arrays.asList(x.split(","))));
+		values.replaceAll(y -> y.trim());
+		values.sort(null);
+		file.writeDataToFile(buildFileData(values, rowSize));
 	}
 
-	private ArrayList<String> returnFileData() {
-		String data = "";
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String input;
-			while ((input = reader.readLine()) != null) {
-				if (rowSize == 0) {//used to measure size of the row.
-					rowSize = input.split(",").length;
-				}
-				data += input + ",";
+	/**
+	 * Builds an ArrayList of data into an ArrayList of strings that can be
+	 * writted to the file.
+	 * 
+	 * @param data
+	 *            - data to build
+	 * @param rowSize
+	 *            - determines size of strings in the ArrayList.
+	 * @return An ArrayList of strings to be written back into CSV file.
+	 */
+	private <T> ArrayList<String> buildFileData(ArrayList<T> data, int rowSize) {
+		ArrayList<String> returnData = new ArrayList<>();
+		String dataString = "";
+		for (int i = 0; i < data.size(); i++) {
+			if (i % rowSize == 0 && i != 0) {
+				returnData.add(dataString.substring(0, dataString.length() - 1));
+				dataString = data.get(i).toString() + ",";
+			} else {
+				dataString += data.get(i).toString() + ",";
 			}
-		} catch (IOException ex) {
-			Logger.getLogger(CSVFileSorter.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		return new ArrayList<String>(Arrays.asList(data.split(",")));
-	}
-
-	private void writeDataToFile(ArrayList<String> dataa) {
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-			for (int i = 0; i < dataa.size(); i++) {
-				if (i % rowSize == 0 && i != 0) {
-					writer.newLine();
-					writer.write(dataa.get(i) + ",");
-				} else {
-					writer.write(dataa.get(i) + ",");
-				}
-			}
-		} catch (IOException ex) {
-			Logger.getLogger(CSVFileSorter.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		returnData.add(dataString.substring(0, dataString.length() - 1));
+		return returnData;
 	}
 }
