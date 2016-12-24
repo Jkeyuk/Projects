@@ -3,7 +3,7 @@ package ZipManager;
 import java.io.File;
 import java.util.Scanner;
 
-public class ZipManagerMain {
+public class Main {
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
