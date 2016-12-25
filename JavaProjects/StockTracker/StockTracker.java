@@ -11,9 +11,14 @@ import org.w3c.dom.NodeList;
 
 public class StockTracker {
 
-	// displays company quote data to terminal
+	/**
+	 * Searches and displays a given companies quote data to the terminal.
+	 * 
+	 * @param symbol
+	 *            - ticker symbol of company to search.
+	 */
 	public void displayQuoteData(String symbol) {
-		String[] data = parseQuoteData(symbol);
+		String[] data = parseQuoteData(requestData("Quote?symbol=", symbol));
 		System.out.println("");
 		System.out.println("Company name: " + data[0]);
 		System.out.println("Last price of company's stock: " + data[1]);
@@ -23,9 +28,15 @@ public class StockTracker {
 		System.out.println("Opening price at start of trading session: " + data[5]);
 	}
 
-	// displays company info to terminal
+	/**
+	 * Searches and displays a given companies name, ticker symbol, and stock
+	 * exchange.
+	 * 
+	 * @param cName
+	 *            - company name to search for.
+	 */
 	public void displayCompanyInfo(String cName) {
-		ArrayList<String[]> data = parseCompanyData(cName);
+		ArrayList<String[]> data = parseCompanyData(requestData("Lookup?input=", cName));
 		for (String[] strings : data) {
 			System.out.println("");
 			System.out.println("Company name: " + strings[0]);
@@ -35,18 +46,20 @@ public class StockTracker {
 	}
 
 	// returns array with company name, symbol, and exchange.
-	private ArrayList<String[]> parseCompanyData(String companyName) {
+	private ArrayList<String[]> parseCompanyData(Element root) {
 		ArrayList<String[]> data = new ArrayList<>();
-		Element root = requestData("Lookup?input=", companyName);
 		NodeList nodes = root.getElementsByTagName("LookupResult");
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node n = nodes.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				String[] nodeItems = new String[3];
 				Element e = (Element) n;
-				nodeItems[0] = e.getElementsByTagName("Name").item(0).getTextContent().trim();
-				nodeItems[1] = e.getElementsByTagName("Symbol").item(0).getTextContent().trim();
-				nodeItems[2] = e.getElementsByTagName("Exchange").item(0).getTextContent().trim();
+				nodeItems[0] = e.getElementsByTagName("Name").item(0).getTextContent()
+						.trim();
+				nodeItems[1] = e.getElementsByTagName("Symbol").item(0).getTextContent()
+						.trim();
+				nodeItems[2] = e.getElementsByTagName("Exchange").item(0).getTextContent()
+						.trim();
 				data.add(nodeItems);
 			}
 		}
@@ -54,9 +67,8 @@ public class StockTracker {
 	}
 
 	// returns array with company stock quote info.
-	private String[] parseQuoteData(String symb) {
+	private String[] parseQuoteData(Element e) {
 		String[] data = new String[6];
-		Element e = requestData("Quote?symbol=", symb);
 		data[0] = e.getElementsByTagName("Name").item(0).getTextContent().trim();
 		data[1] = e.getElementsByTagName("LastPrice").item(0).getTextContent().trim();
 		data[2] = e.getElementsByTagName("Change").item(0).getTextContent().trim();
@@ -70,7 +82,8 @@ public class StockTracker {
 	private Element requestData(String searchType, String queryInput) {
 		Element root = null;
 		try {
-			URL url = new URL("http://dev.markitondemand.com/Api/v2/" + searchType + queryInput);
+			URL url = new URL(
+					"http://dev.markitondemand.com/Api/v2/" + searchType + queryInput);
 			DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
 			DocumentBuilder build = fac.newDocumentBuilder();
 			Document doc = build.parse(url.openStream());
