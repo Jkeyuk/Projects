@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Scanner;
 
 /**
- * This program allows users to create 100X100 pixel thumb nails of a images in a
+ * This program allows users to create 100X100 pixel thumb nails of images in a
  * given directory or file.
  * 
  * @author jonathan
