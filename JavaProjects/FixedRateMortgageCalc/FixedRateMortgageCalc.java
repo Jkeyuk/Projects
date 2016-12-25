@@ -7,9 +7,12 @@ import java.util.Scanner;
 public class FixedRateMortgageCalc {
 
 	public static void main(String[] args) {
-		double principal = getDouble("Please enter the full principal amount, example: 200000");
-		double iRate = getDouble("Please enter the fixed yearly nominal interest rate, example: 6.5");
-		double loanTerm = getDouble("Please enter how many years the loans term will last");
+		double principal = getDouble(
+				"Please enter the full principal amount, example: 200000");
+		double iRate = getDouble(
+				"Please enter the fixed yearly nominal interest rate, example: 6.5");
+		double loanTerm = getDouble(
+				"Please enter how many years the loans term will last");
 		double monthlyP = fixedRateMortgageCalc(iRate, principal, loanTerm);
 		System.out.println("The monthly payments for your loan will be $" + monthlyP);
 	}
@@ -29,14 +32,15 @@ public class FixedRateMortgageCalc {
 
 	private static boolean checkDouble(String x) {
 		try {
-			double d = Double.parseDouble(x);
+			Double.parseDouble(x);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
 		}
 	}
 
-	private static double fixedRateMortgageCalc(double interestRate, double principal, double loanTerm) {
+	private static double fixedRateMortgageCalc(double interestRate, double principal,
+			double loanTerm) {
 		double iRate = (interestRate / 100) / 12;
 		double nPayments = loanTerm * 12;
 		double p = principal;

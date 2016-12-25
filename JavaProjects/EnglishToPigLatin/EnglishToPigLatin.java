@@ -6,33 +6,38 @@ import java.util.regex.Pattern;
 
 public class EnglishToPigLatin {
 
-	private final String STRING;
-
-	public EnglishToPigLatin(String STRING) {
-		this.STRING = STRING;
-	}
-
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Please enter the message to translate:");
-		EnglishToPigLatin x = new EnglishToPigLatin(scan.nextLine());
-		System.out.println("The message in pig latin is as follows:");
-		System.out.println(x.translate());
+		System.out.println("Translating..." + System.lineSeparator()
+				+ new EnglishToPigLatin().translate(scan.nextLine()));
 		scan.close();
 	}
 
-	// returns a string that has been translated to pig Latin.
-	private String translate() {
+	/**
+	 * Converts and returns a given string into pig Latin.
+	 * 
+	 * @param s
+	 *            - string to convert.
+	 * @return - string translated to pig Latin.
+	 */
+	private String translate(String s) {
 		String returnString = "";
-		for (String w : STRING.split(" ")) {
-			returnString += convertToPigLating(removePunctuation(w)) + " ";
+		for (String words : s.split(" ")) {
+			returnString += convertToPigLating(removePunctuation(words)) + " ";
 		}
 		return returnString;
 	}
 
-	// converts a single word to pig Latin. returns string.
+	/**
+	 * Converts a given word to pig Latin and returns it as a string.
+	 * 
+	 * @param s
+	 *            - Word to convert.
+	 * @return - word converted to pig Latin as string.
+	 */
 	private String convertToPigLating(String s) {
-		Matcher m =  Pattern.compile("[aeiouAEIOU]").matcher(s);
+		Matcher m = Pattern.compile("[aeiouAEIOU]").matcher(s);
 		if (m.find()) {
 			if (m.start() > 0) {
 				return s.substring(m.start()) + s.substring(0, m.start()) + "ay";
@@ -44,10 +49,16 @@ public class EnglishToPigLatin {
 		}
 	}
 
-	// removes punctuation from a single word, returns word as string.
-	private String removePunctuation(String s) {
+	/**
+	 * Removes punctuation from a given word, and returns it as a string.
+	 * 
+	 * @param word
+	 *            - word to remove punctuation from.
+	 * @return new word as string.
+	 */
+	private String removePunctuation(String word) {
 		Pattern punctuation = Pattern.compile("\\p{Punct}");
-		String newString = punctuation.matcher(s).replaceAll(" ");
+		String newString = punctuation.matcher(word).replaceAll("");
 		return newString.trim();
 	}
 }
