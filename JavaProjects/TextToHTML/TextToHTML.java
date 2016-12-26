@@ -14,10 +14,13 @@ public class TextToHTML {
 		this.SOURCE_DOC = new File(sourceDocument);
 	}
 
+	/**
+	 * Creates an HTML file which displays the contents of the source document.
+	 */
 	public void makeHtmlFile() {
 		File newFile = new File(SOURCE_DOC.getParentFile().getAbsolutePath()
-				+ File.separator + getFileName() + ".html");
-		String htmlDocument = buildHTML();
+				+ File.separator + getFileName(SOURCE_DOC) + ".html");
+		String htmlDocument = buildHTML(getFileData(SOURCE_DOC));
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
 			writer.write(htmlDocument);
 		} catch (IOException ex) {
@@ -25,10 +28,16 @@ public class TextToHTML {
 		}
 	}
 
-	private String buildHTML() {
-		Object[] fileData = readFile();
-		String htmlHead = "<!DOCTYPE html><html>" + "<head><title>" + 
-				getFileName() + "</title>" + "<meta charset='utf-8'></head>";
+	/**
+	 * Takes the given lines from a file and writes them into a HTML String.
+	 * 
+	 * @param fileData
+	 *            - lines from the file to build string
+	 * @return - String representing the lines in HTML format.
+	 */
+	private String buildHTML(Object[] fileData) {
+		String htmlHead = "<!DOCTYPE html><html>" + "<head><title>"
+				+ getFileName(SOURCE_DOC) + "</title>" + "<meta charset='utf-8'></head>";
 		String htmlBody = "<body>";
 		for (Object string : fileData) {
 			if (string.toString().length() > 0) {
@@ -39,17 +48,31 @@ public class TextToHTML {
 		return htmlHead + htmlBody;
 	}
 
-	private Object[] readFile() {
+	/**
+	 * Returns the lines from a file as an Object[].
+	 * 
+	 * @param file-
+	 *            file to read lines.
+	 * @return lines of the file as an object[].
+	 */
+	private Object[] getFileData(File file) {
 		Object[] data = null;
 		try {
-			data = Files.lines(SOURCE_DOC.toPath()).toArray();
+			data = Files.lines(file.toPath()).toArray();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return data;
 	}
 
-	private String getFileName() {
-		return SOURCE_DOC.getName().split("\\.")[0];
+	/**
+	 * Returns a given files name without the extension
+	 * 
+	 * @param file
+	 *            - file name to return
+	 * @return files name without extentsion.
+	 */
+	private String getFileName(File file) {
+		return file.getName().split("\\.")[0];
 	}
 }
