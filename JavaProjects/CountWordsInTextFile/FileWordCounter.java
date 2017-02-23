@@ -15,8 +15,17 @@ public class FileWordCounter {
 	 * 
 	 * @return returns number of words in a given text file.
 	 */
-	public int countWordsInFile(File file) {
-		return countWordsInString(fileDataToString(file));
+	protected static int countWordsInFile(File file) {
+		int count = 0;
+		try {
+			List<String> linesFromFile = Files.readAllLines(file.toPath());
+			for (String string : linesFromFile) {
+				count += countWordsInString(string);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
 	}
 
 	/**
@@ -29,32 +38,12 @@ public class FileWordCounter {
 	 * @return - number of words in the string as an integer.
 	 */
 	protected static int countWordsInString(String string) {
-		Pattern wordPattern = Pattern.compile("[\\w']+");
+		Pattern wordPattern = Pattern.compile("\\b\\w+\\p{Punct}*\\w*\\p{Punct}*\\b");
 		Matcher m = wordPattern.matcher(string);
 		int count = 0;
 		while (m.find()) {
 			count++;
 		}
 		return count;
-	}
-
-	/**
-	 * Returns the words in a text file as one long string.
-	 * 
-	 * @param file
-	 *            - file to read
-	 * @return - returns all the words in a text file as a string.
-	 */
-	protected static String fileDataToString(File file) {
-		String dataString = "";
-		try {
-			List<String> linesFromFile = Files.readAllLines(file.toPath());
-			for (String string : linesFromFile) {
-				dataString += string + " ";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dataString;
 	}
 }
