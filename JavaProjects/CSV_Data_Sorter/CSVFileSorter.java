@@ -37,13 +37,14 @@ public class CSVFileSorter {
 
 	/**
 	 * Parses an ArrayList of strings with comma separated values, and returns
-	 * the values as an ArrayList of doubles.
+	 * the values as an ArrayList of doubles. Parsed values must be able to
+	 * parse to doubles.
 	 * 
 	 * @param data
 	 *            - ArrayList of strings to parse
 	 * @return An ArrayList of doubles with the values that were parsed.
 	 */
-	private ArrayList<Double> parseNumbers(ArrayList<String> data) {
+	protected ArrayList<Double> parseNumbers(ArrayList<String> data) {
 		ArrayList<String> values = new ArrayList<>();
 		data.forEach(x -> values.addAll(Arrays.asList(x.split(","))));
 		ArrayList<Double> numbers = new ArrayList<>();
@@ -60,13 +61,13 @@ public class CSVFileSorter {
 		ArrayList<String> values = new ArrayList<>();
 		data.forEach(x -> values.addAll(Arrays.asList(x.split(","))));
 		values.replaceAll(y -> y.trim());
-		values.sort(null);
+		values.sort(String.CASE_INSENSITIVE_ORDER);
 		file.writeDataToFile(buildFileData(values, rowSize));
 	}
 
 	/**
-	 * Builds an ArrayList of data into an ArrayList of strings that can be
-	 * writted to the file.
+	 * Builds an ArrayList of data into an ArrayList of strings with rowSize
+	 * number of elements separated by commas for each string.
 	 * 
 	 * @param data
 	 *            - data to build
@@ -74,7 +75,7 @@ public class CSVFileSorter {
 	 *            - determines size of strings in the ArrayList.
 	 * @return An ArrayList of strings to be written back into CSV file.
 	 */
-	private <T> ArrayList<String> buildFileData(ArrayList<T> data, int rowSize) {
+	protected <T> ArrayList<String> buildFileData(ArrayList<T> data, int rowSize) {
 		ArrayList<String> returnData = new ArrayList<>();
 		String dataString = "";
 		for (int i = 0; i < data.size(); i++) {

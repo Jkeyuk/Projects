@@ -8,8 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		if (args.length != 1) {// check proper usage
 			System.out.println("Proper usage is:");
-			System.out.println("java CSVFileSorter.Main [Path To CSV file]");
-			System.out.println("example: java CSVFileSorter.Main test.csv");
+			System.out.println("java CSV_Data_Sorter.Main [Path To CSV file]");
+			System.out.println("example: java CSV_Data_Sorter.Main test.csv");
 		} else if (!new File(args[0]).isFile()) { // check valid file
 			System.out.println("You did not enter a valid file");
 		} else {
@@ -25,6 +25,7 @@ public class Main {
 				sorter.sortTextualData();
 			}
 			scan.close();
+			System.out.println("Finished");
 		}
 	}
 }

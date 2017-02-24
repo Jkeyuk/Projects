@@ -28,7 +28,7 @@ public class CSVFile {
 	}
 
 	/**
-	 * Returns the lines of this file as an ArrayList.
+	 * Returns the lines of this file as an ArrayList of strings.
 	 * 
 	 * @return - Returns the lines of this file as an ArrayList.
 	 */
