@@ -69,10 +69,14 @@ public class ChatUser {
 	private void startChatting() {
 		Runnable talk = () -> {
 			try {
-				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(SOCKET.getOutputStream()));
+				BufferedWriter writer = new BufferedWriter(
+						new OutputStreamWriter(SOCKET.getOutputStream()));
 				Scanner scan = new Scanner(System.in);
 				while (true) {
-					TerminalIO.sendMessage(USER_NAME + ": " + scan.nextLine().trim(), writer);
+					if (scan.hasNext()) {
+						TerminalIO.sendMessage(USER_NAME + ": " + scan.nextLine().trim(),
+								writer);
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

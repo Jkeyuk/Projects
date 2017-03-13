@@ -21,7 +21,8 @@ import java.util.concurrent.Executors;
 public class ChatRoom {
 
 	private final Executor EXEC = Executors.newFixedThreadPool(100);
-	private final List<Socket> CLIENT_LIST = Collections.synchronizedList(new ArrayList<>());
+	private final List<Socket> CLIENT_LIST = Collections
+			.synchronizedList(new ArrayList<>());
 
 	/**
 	 * waits for connections over the server socket for users to connect to.
@@ -56,6 +57,7 @@ public class ChatRoom {
 			try {
 				TerminalIO.listenOverSocket(client, m -> sendChatToUsers(m));
 			} catch (IOException e) {
+				System.out.println("listen catcch");
 				removeClient(client);
 			}
 		};
@@ -71,7 +73,8 @@ public class ChatRoom {
 	private void sendChatToUsers(String message) {
 		for (Socket sock : CLIENT_LIST) {
 			try {
-				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+				BufferedWriter writer = new BufferedWriter(
+						new OutputStreamWriter(sock.getOutputStream()));
 				TerminalIO.sendMessage(message, writer);
 			} catch (IOException e) {
 				e.printStackTrace();

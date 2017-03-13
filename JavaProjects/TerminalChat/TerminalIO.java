@@ -16,7 +16,8 @@ import java.util.function.Consumer;
 public class TerminalIO {
 
 	/**
-	 * Sends a given message over a given buffered writer.
+	 * Sends a given message over a given buffered writer. String cannot be null
+	 * or empty.
 	 * 
 	 * @param m
 	 *            message to send
@@ -25,9 +26,11 @@ public class TerminalIO {
 	 * @throws IOException
 	 */
 	public static void sendMessage(String m, BufferedWriter w) throws IOException {
-		w.write(m);
-		w.newLine();
-		w.flush();
+		if (m != null && m.trim().length() > 0) {
+			w.write(m);
+			w.newLine();
+			w.flush();
+		}
 	}
 
 	/**
@@ -40,8 +43,10 @@ public class TerminalIO {
 	 *            function call with incoming string as parameter.
 	 * @throws IOException
 	 */
-	public static void listenOverSocket(Socket s, Consumer<String> fun) throws IOException {
-		BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
+	public static void listenOverSocket(Socket s, Consumer<String> fun)
+			throws IOException {
+		BufferedReader input = new BufferedReader(
+				new InputStreamReader(s.getInputStream()));
 		while (true) {
 			fun.accept(input.readLine());
 		}

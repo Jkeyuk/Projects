@@ -12,18 +12,14 @@ public class ChatClient {
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
-
 		System.out.println("Please enter a user name.");
 		ChatUser user = new ChatUser(scan.nextLine().trim());
-
 		System.out.println("Please enter number based on following option.");
 		System.out.println("1. Host a Chat Room");
 		System.out.println("2. Connect to a Chat Room");
 		System.out.println("3.Exit");
-
 		int option = scan.nextInt();
 		scan.nextLine();
-
 		if (option == 1) {
 			ChatRoom room = new ChatRoom();
 			System.out.println("Enter port to use:");
