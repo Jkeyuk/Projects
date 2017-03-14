@@ -1,8 +1,8 @@
 # Learning Projects
 
-Repository of source code from different projects
+Repository of source code from different projects undertaken to further my programming skills.
 
-Courses taken so far 
+Programming courses completed:
 
 Harvard CS50 - Introduction to computer science
 
