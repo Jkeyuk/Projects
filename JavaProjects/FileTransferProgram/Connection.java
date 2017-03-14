@@ -92,7 +92,7 @@ public class Connection {
 	}
 
 	/**
-	 * Starts a loop to read messages from the data input stream. messages are
+	 * Starts a loop to read strings from the data input stream. messages are
 	 * consumed by a given consumer. The loop is terminated when the String
 	 * received equals "@END@".
 	 * 

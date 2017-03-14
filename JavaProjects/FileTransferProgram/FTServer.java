@@ -155,8 +155,8 @@ public class FTServer {
 		String[] requestParts = request.split(" ");
 		if (requestParts.length == 2) {
 			String filePath = dirPath + requestParts[1];
-			return directorySafe(filePath) && 
-					(new File(filePath).isFile() || new File(filePath).isDirectory());
+			return directorySafe(filePath)
+					&& (new File(filePath).isFile() || new File(filePath).isDirectory());
 		} else {
 			return false;
 		}

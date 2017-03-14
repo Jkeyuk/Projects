@@ -13,21 +13,19 @@ public class FileTransferProgram {
 
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
-
 		System.out.println("Please choose the number of the following options");
 		System.out.println("1. Connect to a file transfer server");
 		System.out.println("2. Start a file transfer server");
 		System.out.println("3. Exit program");
-
 		int option = getInt("Enter your choice", s);
-
 		if (option == 1) {
 			String ip = getString("Please enter IP to connect to:", s);
 			int port = getInt("Please enter port to connect to", s);
 			FTClient client = new FTClient(ip, port);
 			client.start();
 		} else if (option == 2) {
-			String workingDirectory = getString("Please enter the path to the working directory", s);
+			String workingDirectory = getString(
+					"Please enter the path to the working directory", s);
 			int port = getInt("Please enter port to open server on.", s);
 			FTServer server = new FTServer(workingDirectory);
 			server.startServer(port);
