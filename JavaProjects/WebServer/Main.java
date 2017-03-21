@@ -9,7 +9,7 @@ import java.util.Scanner;
  * @author jonathan
  *
  */
-public class WebServerMain {
+public class Main {
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
@@ -24,8 +24,7 @@ public class WebServerMain {
 	private static String getWorkingDirectory(Scanner scan) {
 		String directory = "";
 		do {
-			System.out
-					.println("Please enter path to the working directory for the server");
+			System.out.println("Please enter path to the working directory.");
 			directory = scan.nextLine();
 		} while (!new File(directory).isDirectory());
 		return directory;
