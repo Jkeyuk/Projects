@@ -10,7 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
 
-public class Zooming {
+public class GUIzoom {
 
 	private static Point2D startPoint;
 
@@ -19,16 +19,16 @@ public class Zooming {
 	 * 
 	 * @param region
 	 */
-	public static void addListeners(Region region) {
+	public static void addListeners(Region region, double minS, double maxS) {
 		region.layoutBoundsProperty().addListener(e -> {
-			Zooming.clipRegion(region);
+			GUIzoom.clipRegion(region);
 		});
 		region.setOnScroll(e -> {
-			zoomFeature(region, e, 1);
+			zoomFeature(region, e, minS, maxS);
 			e.consume();
 		});
 		region.setOnZoom(e -> {
-			zoomFeature(region, e, 1);
+			zoomFeature(region, e, minS, maxS);
 			e.consume();
 		});
 		region.setOnMousePressed(e -> {
@@ -36,9 +36,10 @@ public class Zooming {
 			e.consume();
 		});
 		region.setOnMouseDragged(e -> {
-			moveChildren((Pane) region,
-					startPoint.subtract(new Point2D(e.getSceneX(), e.getSceneY()))
-							.multiply(1 / region.getScaleX()));
+			moveChildren(
+				(Pane) region,
+				startPoint.subtract(new Point2D(e.getSceneX(), e.getSceneY())).multiply(
+					1 / region.getScaleX()));
 			startPoint = new Point2D(e.getSceneX(), e.getSceneY());
 			e.consume();
 		});
@@ -51,20 +52,18 @@ public class Zooming {
 	 * @param e
 	 * @param minS
 	 */
-	private static void zoomFeature(Region node, GestureEvent e, double minS) {
-		zoom(node, Math.pow(1.01, (e instanceof ZoomEvent) ? ((ZoomEvent) e).getZoomFactor()
-				: ((ScrollEvent) e).getDeltaY()), minS);
+	private static void zoomFeature(Region node, GestureEvent e, double minS, double maxS) {
+		double scale = (e instanceof ZoomEvent) ? ((ZoomEvent) e).getZoomFactor()
+				: ((ScrollEvent) e).getDeltaY();
+		scaleNode(node, Math.pow(1.01, scale), minS, maxS);
 		clipRegion(node);
-
-		double scale = node.getScaleX();
-		Bounds viewPort = node.getLayoutBounds();
-		Point2D clickPoint = new Point2D(e.getSceneX(), e.getSceneY() - 30);
-		Point2D viewCenter = new Point2D(viewPort.getWidth() / 2, viewPort.getHeight() / 2);
-		moveChildren((Pane) node, clickPoint.subtract(viewCenter).multiply(1 / scale));
-		System.out.println(scale);
-		System.out.println(clickPoint);
-		System.out.println(viewCenter);
-		
+		if (scale > 0) {
+			Bounds layBound = node.getLayoutBounds();
+			moveChildren(
+				(Pane) node,
+				node.sceneToLocal(e.getSceneX(), e.getSceneY()).subtract(
+					new Point2D(layBound.getWidth(), layBound.getHeight()).multiply(1 / 2.0)));
+		}
 	}
 
 	/**
@@ -74,13 +73,13 @@ public class Zooming {
 	 * @param factor
 	 * @param minS
 	 */
-	private static void zoom(Node node, double factor, double minS) {
+	private static void scaleNode(Node node, double factor, double minS, double maxS) {
 		double oldScale = node.getScaleX();
 		double scale = oldScale * factor;
 		if (scale < minS)
 			scale = minS;
-		if (scale > 50)
-			scale = 50;
+		if (scale > maxS)
+			scale = maxS;
 		node.setScaleX(scale);
 		node.setScaleY(scale);
 	}
@@ -92,18 +91,23 @@ public class Zooming {
 	 * @param region
 	 */
 	private static void clipRegion(Region region) {
-		double scale = region.getScaleX();
-		Point2D mapCenter = new Point2D(region.getWidth() / 2, region.getHeight() / 2);
-		Point2D viewCenter = new Point2D((region.getLayoutBounds().getWidth() / 2) / scale,
-				(region.getLayoutBounds().getHeight() / 2) / scale);
-		final Rectangle outPutClip = new Rectangle();
-		outPutClip.setWidth(region.getWidth());
-		outPutClip.setHeight(region.getHeight());
-		outPutClip.setLayoutX(mapCenter.getX() - viewCenter.getX());
-		outPutClip.setLayoutY(mapCenter.getY() - viewCenter.getY());
-		region.setClip(outPutClip);
+		Bounds rBounds = region.getLayoutBounds();
+		Point2D center = new Point2D(rBounds.getMaxX(), rBounds.getMaxY()).multiply(1 / 2.0);
+		Point2D finalPos = center.subtract(center.multiply(1 / region.getScaleX()));
+		region.setClip(
+			new Rectangle(
+				finalPos.getX(),
+				finalPos.getY(),
+				rBounds.getWidth(),
+				rBounds.getHeight()));
 	}
 
+	/**
+	 * Moves chicldren of a given pane by a given vector.
+	 * 
+	 * @param pane
+	 * @param vector
+	 */
 	private static void moveChildren(Pane pane, Point2D vector) {
 		pane.getChildren().forEach(child -> {
 			child.setTranslateX(child.getTranslateX() - vector.getX());
