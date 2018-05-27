@@ -23,8 +23,8 @@ class ElementParserTest {
 		HashMap<String, String> attributes1 = ElementParser.getAttributes(element1);
 		assertEquals(1, attributes1.size());
 		assertEquals("utf-8", attributes1.get("charset"));
-		// Element with closing tag and two attributes
-		String element2 = "<button class=\"button\" id=\"SkillsButton\">About Me</button>";
+		// Malformed element with closing tag and two attributes
+		String element2 = "<button class=      \"button\" id=\"SkillsButton\">About Me</button>";
 		HashMap<String, String> attributes2 = ElementParser.getAttributes(element2);
 		assertEquals(2, attributes2.size());
 		assertEquals("button", attributes2.get("class"));

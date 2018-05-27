@@ -22,13 +22,13 @@ public class ElementParser {
 		Matcher firstTagMatcher = Pattern.compile("<[\\s\\S]+?>").matcher(element);
 		if (firstTagMatcher.find()) {
 			String frontTag = firstTagMatcher.group();
-			Matcher attrMatcher = Pattern.compile("\\w+?=['\"][\\s\\S]+?['\\\"]").matcher(frontTag);
+			Matcher attrMatcher = Pattern.compile("\\w+?=\\s*?['\"][\\s\\S]+?['\\\"]").matcher(frontTag);
 			while (attrMatcher.find()) {
 				String attribute = attrMatcher.group();
 				int delimeter = attribute.indexOf('=');
 				String key = attribute.substring(0, delimeter);
 				String value = attribute.substring(delimeter + 1).replaceAll("['\"]", "");
-				attributes.put(key, value);
+				attributes.put(key, value.trim());
 			}
 		}
 		return attributes;
