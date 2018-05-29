@@ -1,17 +1,19 @@
-HTML parsing library to extract elements and attributes from elements.
+# HTML parsing library
 
-General usage:
+library to extract html elements and attributes from elements.
 
-Get elements:
+### General usage:
 
-ArrayList\<String\> elements = HtmlParser.getElements("div", html);
+###### Get elements:
 
-Returns a list of strings of the div elements of a given HTML string.
+> ArrayList\<String\> elements = HtmlParser.getElements("div", html);
 
-Get attributes from an element:
+Returns a list of strings of the *div* elements of a given HTML string.
 
-HashMap\<String, String\> attributes = ElementParser.getAttributes("\<meta charset='utf-8'\>");
+###### Get attributes from an element:
 
-attributes.get("charset") = "uft-8";
+> HashMap\<String, String\> attributes = ElementParser.getAttributes("\<meta charset='utf-8'\>");
+
+> attributes.get("charset") = "uft-8";
 
 Will return a hash map of strings representing the attributes as key: value pairs.
