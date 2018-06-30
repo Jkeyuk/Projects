@@ -1,4 +1,4 @@
-package ZipManager;
+package zipManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +9,8 @@ import java.util.zip.ZipInputStream;
 
 /**
  * This class allows users to un-zip up files and folders.
- * @author Jonathan 
+ * 
+ * @author Jonathan
  *
  */
 public class UnZipper {
@@ -33,9 +34,8 @@ public class UnZipper {
 			ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
 			ZipEntry zEntery;
 			while ((zEntery = zipInputStream.getNextEntry()) != null) {
-				File file = new File(destination + File.separator + 
-						zipFile.getName().split("\\.")[0] + 
-						File.separator + zEntery.getName());
+				File file = new File(destination + File.separator
+						+ zipFile.getName().split("\\.")[0] + File.separator + zEntery.getName());
 				file.getParentFile().mkdirs();
 				writeStreamToFile(file, zipInputStream);
 				zipInputStream.closeEntry();
