@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -17,13 +18,12 @@ import java.util.zip.ZipOutputStream;
 public class ZipMaker {
 
 	private ZipOutputStream zipStream;
-	private StringBuilder pathInZip;
+	private File source;
 
 	/**
 	 * Constructs zip maker.
 	 */
 	public ZipMaker() {
-		this.pathInZip = new StringBuilder();
 	}
 
 	/**
@@ -37,16 +37,20 @@ public class ZipMaker {
 	public void startZipping(File fileToZip, String destination) {
 		if (this.zipStream == null) {
 			new File(destination).mkdirs();
+			this.source = fileToZip;
 			this.zipStream = creatZipStream(destination + File.separator + fileToZip.getName());
 		}
 		if (fileToZip.isDirectory()) {
 			File[] fileList = fileToZip.listFiles();
-			pathInZip.append(fileToZip.getName() + File.separator);
 			for (File file : fileList) {
 				startZipping(file, destination);
 			}
 		} else {
-			zip(fileToZip, this.zipStream, this.pathInZip.toString());
+			zip(fileToZip, this.zipStream,
+					Paths.get(source.getName())
+							.resolve(Paths.get(source.getPath())
+							.relativize(Paths.get(fileToZip.getPath())).toString())
+							.toString());
 		}
 	}
 
@@ -85,7 +89,7 @@ public class ZipMaker {
 	 */
 	private static void zip(File fileToZip, ZipOutputStream zipStream, String dirPath) {
 		try {
-			ZipEntry zipEntry = new ZipEntry(dirPath + fileToZip.getName());
+			ZipEntry zipEntry = new ZipEntry(dirPath);
 			zipStream.putNextEntry(zipEntry);
 			writeFileToZipStream(fileToZip, zipStream);
 			zipStream.closeEntry();
