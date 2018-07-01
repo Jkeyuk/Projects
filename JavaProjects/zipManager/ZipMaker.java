@@ -107,7 +107,7 @@ public class ZipMaker {
 			FileInputStream fileInputStream = new FileInputStream(file);
 			byte[] buf = new byte[1024];
 			int bytesRead;
-			while ((bytesRead = fileInputStream.read(buf)) > 0) {
+			while ((bytesRead = fileInputStream.read(buf)) != -1) {
 				zipStream.write(buf, 0, bytesRead);
 			}
 			fileInputStream.close();

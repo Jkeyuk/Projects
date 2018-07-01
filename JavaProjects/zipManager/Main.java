@@ -1,45 +1,87 @@
 package zipManager;
 
 import java.io.File;
-import java.util.Scanner;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
+/**
+ * Entry Point for the Zip Manager application
+ * 
+ * @author jon
+ *
+ */
 public class Main {
 
+	/**
+	 * Main method for the application
+	 * 
+	 * @param args
+	 *            - command line args
+	 */
 	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
-		while (true) {
-			System.out.println("Please choose from the following options...");
-			System.out.println("1. Zip a file or folder.");
-			System.out.println("2. Un zip a zip file");
-			System.out.println("3. Exit program");
-			int choice = In.getInt("Enter Your Choice:", scan);
-			if (choice == 1) {
-				ZipMaker zipper = new ZipMaker();
-				String message = "Enter path of file to zip";
-				zipper.startZipping(getFileOrFolder(message, scan), getDirectory(scan));
-				zipper.closeStream();
-				System.out.println("zipping complete");
-			} else if (choice == 2) {
-				UnZipper un = new UnZipper();
-				String message = "Enter path of file to unzip";
-				un.unzip(getFileOrFolder(message, scan), getDirectory(scan));
-				System.out.println("Unzipping complete");
+		if (args.length != 2) {
+			properUsageMessage();
+		} else {
+			File file = new File(args[0]);
+			File ouputFolder = new File(args[1]);
+			if (file.isDirectory() || file.isFile()) {
+				zipOrUnZip(file, ouputFolder);
 			} else {
-				break;
+				System.out.println("\nCannot Find File\n");
 			}
 		}
-		scan.close();
-		System.exit(0);
 	}
 
-	private static String getDirectory(Scanner scan) {
-		return In.getDirectory(
-				"where would you like to save your file to," + " please enter full pathname.", scan)
-				.getAbsolutePath();
+	/**
+	 * Zips a given zip file, or Unzips if given file is not a zip file, reads
+	 * file signature to check if zip file, output generated in given output
+	 * folder.
+	 * 
+	 * @param file
+	 *            - file to zip or unzip
+	 * @param ouputFolder
+	 *            - output folder
+	 */
+	private static void zipOrUnZip(File file, File ouputFolder) {
+		if (file.isDirectory()) {
+			zip(file, ouputFolder);
+		} else {
+			try {
+				RandomAccessFile raf = new RandomAccessFile(file, "r");
+				long n = raf.readInt();
+				raf.close();
+				if (n == 0x504B0304 || n == 0x504B0506 || n == 0x504B0708)
+					UnZipper.unzip(file, ouputFolder.getAbsolutePath());
+				else
+					zip(file, ouputFolder);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("\nCould not read file");
+			}
+		}
 	}
 
-	private static File getFileOrFolder(String message, Scanner scan) {
-		return new File(In.getStringIf(message, scan,
-				x -> new File(x).isFile() || new File(x).isDirectory()));
+	/**
+	 * Zips file to given output folder.
+	 * 
+	 * @param file
+	 *            - file to zip
+	 * @param ouputFolder
+	 *            - output location
+	 */
+	private static void zip(File file, File ouputFolder) {
+		ZipMaker zipper = new ZipMaker();
+		zipper.startZipping(file, ouputFolder.getAbsolutePath());
+		zipper.closeStream();
+	}
+
+	/**
+	 * Message with instructions for proper usage.
+	 */
+	private static void properUsageMessage() {
+		System.out.println("\nProper usage: zipManager.Main [ File Path ] [ Output Path ]");
+		System.out.println("If file path leads to a zip file, the file is unzipped.");
+		System.out.println("Regular files or folders are zipped");
+		System.out.println("Outputs files to output path\n");
 	}
 }
