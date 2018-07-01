@@ -1,6 +1,8 @@
 package zipManager.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,10 +76,10 @@ class ZipMakerTest {
 	 */
 	private static void zipTest(File expectedZip, File fileToZip) {
 		// Zip given test file
-		ZipMaker zipper = new ZipMaker("zipOutput");
-		zipper.startZipping(fileToZip);
+		ZipMaker zipper = new ZipMaker();
+		zipper.startZipping(fileToZip, "zipOutput/");
 		zipper.closeStream();
-		// Assert destination directory and zip file were created.
+		// Assert zip file created at destination folder.
 		assertTrue(new File("zipOutput/" + expectedZip.getName()).exists());
 		// Compare resulting zip with the expected zip.
 		try {
@@ -112,8 +114,8 @@ class ZipMakerTest {
 		assertTrue(zip1Entries.keySet().containsAll(zip2Entries.keySet()));
 		// compare corresponding zip entries from each zip for equality
 		for (Map.Entry<String, ZipEntry> ent : zip2Entries.entrySet()) {
-			InputStream zip2Stream = zip2.getInputStream(ent.getValue());
-			InputStream zip1Stream = zip1.getInputStream(zip1Entries.get(ent.getKey()));
+			InputStream zip2Stream = new BufferedInputStream(zip2.getInputStream(ent.getValue()));
+			InputStream zip1Stream = new BufferedInputStream(zip1.getInputStream(zip1Entries.get(ent.getKey())));
 			int data;
 			while ((data = zip2Stream.read()) != -1) {
 				assertEquals(data, zip1Stream.read());

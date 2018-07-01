@@ -14,15 +14,15 @@ public class Main {
 			System.out.println("3. Exit program");
 			int choice = In.getInt("Enter Your Choice:", scan);
 			if (choice == 1) {
-				ZipMaker zipper = new ZipMaker(getDirectory(scan));
+				ZipMaker zipper = new ZipMaker();
 				String message = "Enter path of file to zip";
-				zipper.startZipping(getFileOrFolder(message, scan));
+				zipper.startZipping(getFileOrFolder(message, scan), getDirectory(scan));
 				zipper.closeStream();
 				System.out.println("zipping complete");
 			} else if (choice == 2) {
-				UnZipper un = new UnZipper(getDirectory(scan));
+				UnZipper un = new UnZipper();
 				String message = "Enter path of file to unzip";
-				un.unzip(getFileOrFolder(message, scan).getAbsolutePath());
+				un.unzip(getFileOrFolder(message, scan), getDirectory(scan));
 				System.out.println("Unzipping complete");
 			} else {
 				break;

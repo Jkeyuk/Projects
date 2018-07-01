@@ -17,40 +17,36 @@ import java.util.zip.ZipOutputStream;
 public class ZipMaker {
 
 	private ZipOutputStream zipStream;
-	private String destination;
-	private StringBuilder path;
+	private StringBuilder pathInZip;
 
 	/**
-	 * Constructs zip maker with path to output folder.
-	 * 
-	 * @param destination
-	 *            - path to output folder.
+	 * Constructs zip maker.
 	 */
-	public ZipMaker(String destination) {
-		this.destination = destination;
-		this.path = new StringBuilder();
+	public ZipMaker() {
+		this.pathInZip = new StringBuilder();
 	}
 
 	/**
-	 * Recursively zips files and directories.
+	 * Recursively zips files and directories to the given destination.
 	 * 
 	 * @param fileToZip
-	 *            - file or directory to zip
-	 * 
+	 *            - file to zip
+	 * @param destination
+	 *            - output folder
 	 */
-	public void startZipping(File fileToZip) {
+	public void startZipping(File fileToZip, String destination) {
 		if (this.zipStream == null) {
-			new File(this.destination).mkdirs();
+			new File(destination).mkdirs();
 			this.zipStream = creatZipStream(destination + File.separator + fileToZip.getName());
 		}
 		if (fileToZip.isDirectory()) {
 			File[] fileList = fileToZip.listFiles();
-			path.append(fileToZip.getName() + File.separator);
+			pathInZip.append(fileToZip.getName() + File.separator);
 			for (File file : fileList) {
-				startZipping(file);
+				startZipping(file, destination);
 			}
 		} else {
-			zip(fileToZip, this.zipStream, this.path.toString());
+			zip(fileToZip, this.zipStream, this.pathInZip.toString());
 		}
 	}
 
@@ -99,7 +95,7 @@ public class ZipMaker {
 	}
 
 	/**
-	 * write the bytes from a given file to a given zipStream.
+	 * Writes the bytes from a given file to a given zip input stream.
 	 * 
 	 * @param file
 	 *            - file to write to Zip stream

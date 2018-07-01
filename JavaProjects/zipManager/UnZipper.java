@@ -8,36 +8,32 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * This class allows users to un-zip up files and folders.
+ * This class allows users to unzip zip files.
  * 
  * @author Jonathan
  *
  */
 public class UnZipper {
 
-	private final String destination;
-
-	public UnZipper(String destination) {
-		this.destination = destination;
-	}
-
 	/**
-	 * unzips a zip file at a given path to the destinatiion folder.
+	 * Unzips a given zip file to the given output path.
 	 * 
-	 * @param zipFilePath
-	 *            - path to file to unzip.
+	 * @param zipFile
+	 *            - file to unzip.
+	 * @param outFolder
+	 *            - path to output folder.
 	 */
-	public void unzip(String zipFilePath) {
-		makeOutputFolder();
+	public static void unzip(File zipFile, String outFolder) {
+		new File(outFolder).mkdirs();
 		try {
-			File zipFile = new File(zipFilePath);
 			ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
 			ZipEntry zEntery;
 			while ((zEntery = zipInputStream.getNextEntry()) != null) {
-				File file = new File(destination + File.separator
-						+ zipFile.getName().split("\\.")[0] + File.separator + zEntery.getName());
-				file.getParentFile().mkdirs();
-				writeStreamToFile(file, zipInputStream);
+				if (!zEntery.isDirectory()) {
+					File file = new File(outFolder + File.separator + zEntery.getName());
+					file.getParentFile().mkdirs();
+					writeStreamToFile(file, zipInputStream);
+				}
 				zipInputStream.closeEntry();
 			}
 			zipInputStream.close();
@@ -47,29 +43,19 @@ public class UnZipper {
 	}
 
 	/**
-	 * makes destination folder if it does not exist.
-	 */
-	private void makeOutputFolder() {
-		File file = new File(destination);
-		if (!file.exists()) {
-			file.mkdir();
-		}
-	}
-
-	/**
-	 * writes bytes from a given ZipInputStream to a given file.
+	 * Writes the bytes from a given ZipInputStream to a given file.
 	 * 
 	 * @param file
 	 *            - file to write bytes to
 	 * @param zipInputStream
 	 *            - stream to read bytes from.
 	 */
-	void writeStreamToFile(File file, ZipInputStream zipInputStream) {
+	private static void writeStreamToFile(File file, ZipInputStream zipInputStream) {
 		try {
 			FileOutputStream fileOutput = new FileOutputStream(file);
 			byte[] buffer = new byte[1024];
 			int x;
-			while ((x = zipInputStream.read(buffer)) > 0) {
+			while ((x = zipInputStream.read(buffer)) != -1) {
 				fileOutput.write(buffer, 0, x);
 			}
 			fileOutput.close();
