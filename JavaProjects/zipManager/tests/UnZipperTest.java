@@ -87,8 +87,6 @@ class UnZipperTest {
 	private static void assertFileOrDirEqual(File output, File expected) {
 		// same name
 		assertEquals(output.getName(), expected.getName());
-		// same length
-		assertEquals(output.length(), expected.length());
 		if (output.isDirectory()) {
 			assertTrue(expected.isDirectory());
 			// same files
@@ -116,6 +114,7 @@ class UnZipperTest {
 	 *            - second file to compare
 	 */
 	private static void assertFileEqual(File output, File expected) {
+		assertEquals(output.length(), expected.length());
 		try {
 			BufferedInputStream outPutStream = new BufferedInputStream(new FileInputStream(output));
 			BufferedInputStream exStream = new BufferedInputStream(new FileInputStream(expected));

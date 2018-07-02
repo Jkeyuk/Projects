@@ -33,6 +33,8 @@ public class UnZipper {
 					File file = new File(outFolder + File.separator + zEntery.getName());
 					file.getParentFile().mkdirs();
 					writeStreamToFile(file, zipInputStream);
+				} else {
+					new File(outFolder + File.separator + zEntery.getName()).mkdirs();
 				}
 				zipInputStream.closeEntry();
 			}

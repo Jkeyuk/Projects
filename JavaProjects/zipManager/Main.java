@@ -33,9 +33,8 @@ public class Main {
 	}
 
 	/**
-	 * Zips a given zip file, or Unzips if given file is not a zip file, reads
-	 * file signature to check if zip file, output generated in given output
-	 * folder.
+	 * Zips a given file, or Unzips if given file is a zip file, reads file
+	 * signature to check if zip file, output generated in given output folder.
 	 * 
 	 * @param file
 	 *            - file to zip or unzip
