@@ -3,6 +3,7 @@ package htmlParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,20 +14,21 @@ import java.util.regex.Pattern;
 public class HtmlParser {
 
 	/**
-	 * Returns the elements of a given html string corresponding with the given
-	 * tag name.
+	 * Returns the HTML elements of a given HTML string corresponding with the
+	 * given tag name.
 	 * 
 	 * @param tagName
 	 *            - name of the elements to get
 	 * @param html
 	 *            - html of the document to parse
-	 * @return - ArrayList of Strings of the elements parsed.
+	 * @return - List of the elements parsed.
 	 */
-	public static ArrayList<String> getElements(String tagName, String html) {
+	public static List<String> getElements(String tagName, String html) {
+		if (tagName == null || html == null) return new ArrayList<>();
 		tagName = tagName.toLowerCase();
 		if (hasClosingTag(tagName)) {
-			ArrayList<Integer[]> openTags = getPositions("<" + tagName + "(\\s|>)", html);
-			ArrayList<Integer[]> closingTags = getPositions("</" + tagName + ">", html);
+			List<Integer[]> openTags = getPositions("<" + tagName + "(\\s|>)", html);
+			List<Integer[]> closingTags = getPositions("</" + tagName + ">", html);
 			return buildStrings(html, sortNested(openTags, closingTags));
 		} else {
 			return buildStrings(html, getPositions("<" + tagName + "([\\s\\S]*?)>", html));
@@ -34,34 +36,33 @@ public class HtmlParser {
 	}
 
 	/**
-	 * Returns a list of substrings from the given index positions of a given
-	 * html string.
+	 * Returns a list of substrings from a given string, built from the given
+	 * list of integer arrays which contain the {start, end} indexes of each
+	 * substring.
 	 * 
-	 * @param html
-	 *            - html to build strings from
+	 * @param string
+	 *            - string to build substrings strings from
 	 * @param positions
-	 *            - start and end positions
+	 *            - start and end positions of substrings
 	 * @return - ArrayList of strings built from the html.
 	 */
-	private static ArrayList<String> buildStrings(String html, ArrayList<Integer[]> positions) {
+	private static List<String> buildStrings(String string, List<Integer[]> positions) {
 		ArrayList<String> elements = new ArrayList<>();
-		positions.forEach(p -> elements.add(html.substring(p[0], p[1])));
+		positions.forEach(p -> elements.add(string.substring(p[0], p[1])));
 		return elements;
 	}
 
 	/**
-	 * Returns the final index positions of nested or non nested elements
-	 * represented by the given index poistions of the opening and closing tags.
+	 * Returns a list of integer arrays containing the start and end index
+	 * positions of the given opening and closing tags..
 	 * 
 	 * @param openTags
 	 *            - start and end positions of a list of opening tags
 	 * @param closeTags
 	 *            - start and end positions of a list of closing tags
-	 * @return final positions of elements represented by the opening and
-	 *         closing tags.
+	 * @return final start and end positions of elements.
 	 */
-	private static ArrayList<Integer[]> sortNested(ArrayList<Integer[]> openTags,
-			ArrayList<Integer[]> closeTags) {
+	private static List<Integer[]> sortNested(List<Integer[]> openTags, List<Integer[]> closeTags) {
 		ArrayList<Integer[]> finalPositions = new ArrayList<>();
 		if (openTags.size() == closeTags.size()) {
 			Collections.reverse(openTags);
@@ -84,17 +85,18 @@ public class HtmlParser {
 	}
 
 	/**
-	 * Returns the start and end index positions of a given html string matched
-	 * by the given regular expression
+	 * Returns a list of index arrays with the start and end index positions of
+	 * a matched regular expression on a given string.
 	 * 
 	 * @param regEx
 	 *            - expression to search for
-	 * @param html
-	 *            - html scan
-	 * @return index positions containing start and end points of each match.
+	 * @param string
+	 *            - string to search on.
+	 * @return list of index arrays containing start and end points of each
+	 *         match.
 	 */
-	private static ArrayList<Integer[]> getPositions(String regEx, String html) {
-		Matcher matcher = Pattern.compile(regEx).matcher(html);
+	private static List<Integer[]> getPositions(String regEx, String string) {
+		Matcher matcher = Pattern.compile(regEx).matcher(string);
 		ArrayList<Integer[]> positions = new ArrayList<>();
 		while (matcher.find()) {
 			Integer[] pos = { matcher.start(), matcher.end() };
