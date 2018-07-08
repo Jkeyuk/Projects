@@ -13,3 +13,5 @@ After building the source code, the application can be started with:
 > java webCrawler.Main
 
 Just follow the prompts in the console to get started.
+
+Uses an Html parsing library written [here] (https://github.com/Jkeyuk/Projects/tree/master/JavaProjects/HtmlParsingLibrary/).
