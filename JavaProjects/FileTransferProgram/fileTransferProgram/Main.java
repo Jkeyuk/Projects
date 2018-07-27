@@ -1,19 +1,13 @@
-package FileTransferProgram;
+package fileTransferProgram;
 
 import java.util.Scanner;
 
-/**
- * This program allows users to connect to and run their own file transfer
- * servers.
- * 
- * @author Jonathan Keyuk
- *
- */
-public class FileTransferProgram {
+public class Main {
 
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
-		System.out.println("Please choose the number of the following options");
+		String workingDirectory = getString("Please enter the path to the working directory", s);
+		System.out.println("\nPlease choose the number of the following options");
 		System.out.println("1. Connect to a file transfer server");
 		System.out.println("2. Start a file transfer server");
 		System.out.println("3. Exit program");
@@ -21,18 +15,15 @@ public class FileTransferProgram {
 		if (option == 1) {
 			String ip = getString("Please enter IP to connect to:", s);
 			int port = getInt("Please enter port to connect to", s);
-			FTClient client = new FTClient(ip, port);
-			client.start();
+			FTclient client = new FTclient(workingDirectory);
+			client.start(ip, port);
 		} else if (option == 2) {
-			String workingDirectory = getString(
-					"Please enter the path to the working directory", s);
 			int port = getInt("Please enter port to open server on.", s);
-			FTServer server = new FTServer(workingDirectory);
-			server.startServer(port);
+			FTserver server = new FTserver(workingDirectory);
+			server.start(port);
 			System.out.println("Server Started");
 		} else if (option == 3) {
 			s.close();
-			System.exit(0);
 		}
 	}
 
@@ -71,8 +62,7 @@ public class FileTransferProgram {
 	}
 
 	/**
-	 * prompts user with a given message and scans input for string. inputed
-	 * string is returned.
+	 * prompts user with a given message and returns user input.
 	 * 
 	 * @param m
 	 *            - message to prompt to user
