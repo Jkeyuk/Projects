@@ -1,0 +1,12 @@
+
+
+
+
+#+begin_src emacs-lisp
+(set-face-attribute `default nil
+		    :family "Trebuchet MS"
+		    :height 120)
+#+end_src
+
+#+RESULTS:
+: hi
