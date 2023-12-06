@@ -19,4 +19,3 @@
   "Turn on MOTD mode"
   (interactive)
   (buffer-face-set `(:height 300)))
-
