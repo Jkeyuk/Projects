@@ -9,6 +9,7 @@
 (which-key-mode)
 
 (use-package company :ensure t)
+(global-company-mode)
 (use-package yasnippet :ensure t)
 (use-package yasnippet-snippets :ensure t)
 (use-package magit :ensure t)
