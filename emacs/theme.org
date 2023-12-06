@@ -1,12 +1,7 @@
+* Font
 
-
-
-
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results output silent
 (set-face-attribute `default nil
 		    :family "Trebuchet MS"
 		    :height 120)
 #+end_src
-
-#+RESULTS:
-: hi
