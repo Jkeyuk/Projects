@@ -14,6 +14,14 @@
 (use-package yasnippet-snippets :ensure t)
 (use-package magit :ensure t)
 
+;; Download Evil
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+
+;; Enable Evil
+(require 'evil)
+(evil-mode 1)
+
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
