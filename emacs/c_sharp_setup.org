@@ -56,6 +56,6 @@
 
 ** Install language server
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :results silent
 (lsp-install-server `omnisharp)
 #+end_src
