@@ -18,4 +18,4 @@
 (defun jonk-motd-buffer-mode()
   "Turn on MOTD mode"
   (interactive)
-  (buffer-face-set `(:height 300)))
+  (buffer-face-set `(:height 400)))
