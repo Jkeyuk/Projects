@@ -47,7 +47,9 @@ return {
 			'saadparwaiz1/cmp_luasnip',
 			'hrsh7th/cmp-vsnip',
 			'hrsh7th/vim-vsnip',
-			'rafamadriz/friendly-snippets'
+			'rafamadriz/friendly-snippets',
 		}
-	}
+	},
+	{ 'mfussenegger/nvim-lint', },
+	{ 'mfussenegger/nvim-dap' }
 }
