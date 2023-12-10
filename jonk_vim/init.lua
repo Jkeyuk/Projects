@@ -19,3 +19,18 @@ wk.register({
 	},
 })
 
+require("nvim-treesitter.configs").setup {
+	ensure_installed = { "lua", "javascript", "typescript", "c", "c_sharp", "java", "json", "python" },
+	highlight = {
+		enable = true,
+	},
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+			init_selection = "gnn", -- set to `false` to disable one of the mappings
+			node_incremental = "grn",
+			scope_incremental = "grc",
+			node_decremental = "grm",
+		},
+	}
+}
