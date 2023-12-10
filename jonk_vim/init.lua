@@ -10,6 +10,8 @@ require("jonk_vim.formatter")
 local wk = require("which-key")
 wk.register({
 	["<leader>"] = {
+		e = { "diag open float" },
+		q = { "diag list" },
 		f = {
 			name = "+file",
 			f = { "<cmd>Telescope find_files<cr>", "Find File" },
@@ -17,6 +19,14 @@ wk.register({
 			b = { "<cmd>Telescope buffers<cr>", "Buffers" },
 			h = { "<cmd>Telescope help_tags<cr>", "Help Tags" },
 		},
+		w = {
+			name = "+lsp",
+			f = { "format" },
+			a = { "add worspace folder" },
+			r = { "remove worspace folder" },
+			l = { "list workspace folder" },
+		},
+		D = { "lsp type definition" }
 	},
 })
 
@@ -33,7 +43,7 @@ require("nvim-treesitter.configs").setup {
 		"html"
 	},
 	highlight = {
-		enable = true,
+		enable = false,
 	},
 	incremental_selection = {
 		enable = true,
