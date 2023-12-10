@@ -46,7 +46,8 @@ return {
 			'L3MON4D3/LuaSnip',
 			'saadparwaiz1/cmp_luasnip',
 			'hrsh7th/cmp-vsnip',
-			'hrsh7th/vim-vsnip'
+			'hrsh7th/vim-vsnip',
+			'rafamadriz/friendly-snippets'
 		}
 	}
 }
