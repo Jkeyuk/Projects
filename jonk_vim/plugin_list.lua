@@ -51,5 +51,6 @@ return {
 		}
 	},
 	{ 'mfussenegger/nvim-lint', },
-	{ 'mfussenegger/nvim-dap' }
+	{ 'mfussenegger/nvim-dap' },
+	{'mhartington/formatter.nvim'}
 }

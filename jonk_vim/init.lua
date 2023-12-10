@@ -4,6 +4,7 @@ require("jonk_vim.lazy_settings")
 require("jonk_vim.lsp_settings")
 require("jonk_vim.telescope_settings")
 require("jonk_vim.cmp_settings")
+require("jonk_vim.formatter")
 -- Which Key Setup
 
 local wk = require("which-key")
@@ -20,7 +21,17 @@ wk.register({
 })
 
 require("nvim-treesitter.configs").setup {
-	ensure_installed = { "lua", "javascript", "typescript", "c", "c_sharp", "java", "json", "python" },
+	ensure_installed = {
+		"lua",
+		"javascript",
+		"typescript",
+		"c",
+		"c_sharp",
+		"java",
+		"json",
+		"python",
+		"html"
+	},
 	highlight = {
 		enable = true,
 	},
