@@ -7,9 +7,11 @@ require("mason-lspconfig").setup {
 		"lua_ls",
 		"tsserver",
 		"eslint",
-		"html"
+		"html",
+		"csharp_ls"
 	},
 }
+
 
 local lspconfig = require('lspconfig')
 lspconfig.eslint.setup {}
@@ -27,6 +29,9 @@ lspconfig.tsserver.setup {
 }
 
 lspconfig.html.setup {
+	capabilities = capabilities
+}
+lspconfig.csharp_ls.setup{
 	capabilities = capabilities
 }
 
