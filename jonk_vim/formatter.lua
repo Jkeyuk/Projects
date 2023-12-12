@@ -25,6 +25,9 @@ require("formatter").setup {
 		},
 		typescript = {
 			require("jonk_vim.prettier_formater")
+		},
+		cs = {
+			require("formatter.filetypes.cs").csharpier
 		}
 	}
 }
