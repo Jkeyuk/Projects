@@ -17,6 +17,9 @@ require("formatter").setup {
 		json = {
 			require("jonk_vim.prettier_formater")
 		},
+		jsonc = {
+			require("jonk_vim.prettier_formater")
+		},
 		css = {
 			require("jonk_vim.prettier_formater")
 		},

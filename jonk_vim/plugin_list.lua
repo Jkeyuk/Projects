@@ -7,7 +7,7 @@ return {
 		config = function()
 			require("lualine").setup({
 				options = {
-					icons_enabled = true,
+					icons_enabled = false,
 					theme = "powerline_dark",
 				}
 			})
@@ -52,5 +52,16 @@ return {
 	},
 	{ 'mfussenegger/nvim-lint', },
 	{ 'mfussenegger/nvim-dap' },
-	{'mhartington/formatter.nvim'}
+	{ 'mhartington/formatter.nvim' },
+	{
+		"NeogitOrg/neogit",
+		dependencies = {
+			"nvim-lua/plenary.nvim", -- required
+			"sindrets/diffview.nvim", -- optional - Diff integration
+
+			-- Only one of these is needed, not both.
+			"nvim-telescope/telescope.nvim", -- optional
+		},
+		config = true
+	}
 }

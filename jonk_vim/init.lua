@@ -5,30 +5,8 @@ require("jonk_vim.lsp_settings")
 require("jonk_vim.telescope_settings")
 require("jonk_vim.cmp_settings")
 require("jonk_vim.formatter")
--- Which Key Setup
-
-local wk = require("which-key")
-wk.register({
-	["<leader>"] = {
-		e = { "diag open float" },
-		q = { "diag list" },
-		f = {
-			name = "+file",
-			f = { "<cmd>Telescope find_files<cr>", "Find File" },
-			g = { "<cmd>Telescope live_grep<cr>", "Live Grep" },
-			b = { "<cmd>Telescope buffers<cr>", "Buffers" },
-			h = { "<cmd>Telescope help_tags<cr>", "Help Tags" },
-		},
-		w = {
-			name = "+lsp",
-			f = { "format" },
-			a = { "add worspace folder" },
-			r = { "remove worspace folder" },
-			l = { "list workspace folder" },
-		},
-		D = { "lsp type definition" }
-	},
-})
+require("jonk_vim.theme_commands")
+require("jonk_vim.which_key_setting")
 
 require("nvim-treesitter.configs").setup {
 	ensure_installed = {
