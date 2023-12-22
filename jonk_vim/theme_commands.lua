@@ -1,96 +1,99 @@
-function SetTsSynHl()
-		vim.api.nvim_set_hl(0, "typescriptBraces", {
-			fg = 'Orange'
-		})
-		vim.api.nvim_set_hl(0, "typescriptParens", {
-			fg = 'Orange'
-		})
-end
-
 function SetSyntaxHl()
-		-- AccessModifier
-		vim.api.nvim_set_hl(0, "csModifier", {
-			fg = '#8e9bff'
-		})
+	-- AccessModifier
+	vim.api.nvim_set_hl(0, "csModifier", {
+		fg = '#8e9bff'
+	})
 
-		vim.api.nvim_set_hl(0, "csAccessModifier", {
-			fg = '#8e9bff'
-		})
-		vim.api.nvim_set_hl(0, "Storageclass", {
-			fg = '#8e9bff'
-		})
+	vim.api.nvim_set_hl(0, "csAccessModifier", {
+		fg = '#8e9bff'
+	})
+	vim.api.nvim_set_hl(0, "Storageclass", {
+		fg = '#8e9bff'
+	})
 
-		-- Fucntion/Method
-		vim.api.nvim_set_hl(0, "@lsp.type.function", {
-			fg = '#fffc7a'
-		})
-		vim.api.nvim_set_hl(0, "@function", {
-			fg = '#fffc7a'
-		})
-		vim.api.nvim_set_hl(0, "@lsp.type.method", {
-			fg = '#fffc7a'
-		})
-		vim.api.nvim_set_hl(0, "Function", {
-			fg = '#fffc7a'
-		})
+	-- Comment
+	vim.api.nvim_set_hl(0, "Comment", {
+		fg = '#fc634f'
+	})
+	-- Fucntion/Method
+	vim.api.nvim_set_hl(0, "@lsp.type.function", {
+		fg = '#4ffc9d'
+	})
+	vim.api.nvim_set_hl(0, "@function", {
+		fg = '#4ffc9d'
+	})
+	vim.api.nvim_set_hl(0, "@lsp.type.method", {
+		fg = '#4ffc9d'
+	})
+	vim.api.nvim_set_hl(0, "Function", {
+		fg = '#4ffc9d'
+	})
 
-		-- class
---		vim.api.nvim_set_hl(0, "@lsp.type.class", {
---			fg = 'Orange'
---		})
---		vim.api.nvim_set_hl(0, "@lsp.type.struct", {
---			fg = 'Orange'
---		})
-		vim.api.nvim_set_hl(0, "Structure", {
-			fg = '#9bff8e'
-		})
+	-- class
+	--		vim.api.nvim_set_hl(0, "@lsp.type.class", {
+	--			fg = 'Orange'
+	--		})
+	--		vim.api.nvim_set_hl(0, "@lsp.type.struct", {
+	--			fg = 'Orange'
+	--		})
+	vim.api.nvim_set_hl(0, "Structure", {
+		fg = '#4ee8fc'
+	})
+	vim.api.nvim_set_hl(0, "Special", {
+		fg = '#4ee8fc'
+	})
+	vim.api.nvim_set_hl(0, "Operator", {
+		fg = '#4ee8fc'
+	})
 
-		-- Enum
-		vim.api.nvim_set_hl(0, "@lsp.type.enum", {
-			fg = 'Orange'
-		})
-		vim.api.nvim_set_hl(0, "@lsp.type.enumMember", {
-			fg = 'Orange'
-		})
+	-- Enum
+	vim.api.nvim_set_hl(0, "@lsp.type.enum", {
+		fg = 'Orange'
+	})
+	vim.api.nvim_set_hl(0, "@lsp.type.enumMember", {
+		fg = 'Orange'
+	})
 
-		-- parameter
-		vim.api.nvim_set_hl(0, "@lsp.type.parameter", {
-			fg = 'LightYellow'
-		})
+	-- parameter
+	vim.api.nvim_set_hl(0, "@lsp.type.parameter", {
+		fg = 'LightYellow'
+	})
 
-		-- property
-		vim.api.nvim_set_hl(0, "@lsp.type.property", {
-			fg = '#7afffc'
-		})
+	-- property
+	vim.api.nvim_set_hl(0, "@lsp.type.property", {
+		fg = '#7afffc'
+	})
 
-		-- type
-		vim.api.nvim_set_hl(0, "@lsp.type.type", {
-			fg = 'LightBlue'
-		})
-		vim.api.nvim_set_hl(0, "csType", {
-			fg = '#ff8e9b'
-		})
+	-- Statement
 
-		-- variable
-		vim.api.nvim_set_hl(0, "@lsp.type.variable", {
-			fg = 'LightGreen'
-		})
-		-- Braces
-		vim.api.nvim_set_hl(0, "csBraces", {
-			fg = 'White'
-		})
-	-- code
+	vim.api.nvim_set_hl(0, "Statement", {
+		fg = '#4ee8fc'
+	})
+
+	-- type
+	vim.api.nvim_set_hl(0, "@lsp.type.type", {
+		fg = 'LightBlue'
+	})
+	vim.api.nvim_set_hl(0, "csType", {
+		fg = '#ff8e9b'
+	})
+
+	-- variable
+	vim.api.nvim_set_hl(0, "@lsp.type.variable", {
+		fg = '#e8fc4f'
+	})
+	-- Braces
+	vim.api.nvim_set_hl(0, "csBraces", {
+		fg = 'Magenta'
+	})
+	vim.api.nvim_set_hl(0, "LineNr", {
+		fg = '#4ee8fc'
+	})
 end
+
 vim.api.nvim_create_user_command(
 	'JonkSetSyntaxHl',
 	function(opts)
-			SetSyntaxHl();
-	end,
-	{})
-vim.api.nvim_create_user_command(
-	'JonkTsSyntaxHl',
-	function(opts)
-			SetSyntaxHl();
-			SetTsSynHl();
+		SetSyntaxHl();
 	end,
 	{})

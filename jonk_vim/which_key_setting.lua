@@ -14,9 +14,15 @@ wk.register({
 			b = { "<cmd>Telescope buffers<cr>", "Buffers" },
 			h = { "<cmd>Telescope help_tags<cr>", "Help Tags" },
 		},
+		s = {
+			name = "+save menu",
+			s = { "<cmd>write<cr>", "save file" },
+		},
+		t = { "<cmd>Telescope<cr>", "Telescope" },
 		w = {
 			name = "+lsp",
 			f = { "format" },
+			F = { "<cmd>Format<cr>", "Formatter Format" },
 			a = { "add worspace folder" },
 			r = { "remove worspace folder" },
 			l = { "list workspace folder" },

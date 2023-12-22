@@ -5,6 +5,9 @@ vim.o.relativenumber = true
 vim.o.termguicolors = true
 vim.o.tabstop = 4
 
+vim.o.cursorline = true
+vim.o.cursorlineopt = 'number'
+
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
