@@ -86,9 +86,6 @@ function SetSyntaxHl()
 	vim.api.nvim_set_hl(0, "csBraces", {
 		fg = 'Magenta'
 	})
-	vim.api.nvim_set_hl(0, "LineNr", {
-		fg = '#4ee8fc'
-	})
 end
 
 vim.api.nvim_create_user_command(

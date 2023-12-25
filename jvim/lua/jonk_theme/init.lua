@@ -1,15 +1,25 @@
 require("jonk_theme.lua_Line_theme")
 
+local cap_green = {
+	primary = '#CDD6F4',
+	secondary = '#A6E3A1',
+	warn = '#e8fc4f',
+	err = '#fc634f',
+	bg = '#1E1E2E'
+}
+
+
 local electric_blue = {
 	primary = '#4ee8fc',
 	primary_text = '#000000',
 	secondary = '#4ffc9d',
-	yellow = '#e8fc4f',
-	red = '#fc634f',
+	warn = '#e8fc4f',
+	err = '#fc634f',
 	bg = '#000000'
 }
 
 function ApplyTheme(cols)
+	vim.cmd.colorscheme('murphy')
 	vim.api.nvim_set_hl(0, "Normal", {
 		fg = cols.primary,
 		bg = cols.bg
@@ -24,13 +34,15 @@ function ApplyTheme(cols)
 		fg = cols.secondary
 	})
 	vim.api.nvim_set_hl(0, "CursorLineNr", {
-		fg = cols.red
+		fg = cols.err
 	})
 end
 
 vim.api.nvim_create_user_command(
 	'JonkThemeElectricBlue',
 	function()
-		ApplyTheme(electric_blue)
+		ApplyTheme(cap_green)
 	end,
 	{})
+ApplyTheme(cap_green)
+require("jonk_theme.syntax_hl")

@@ -22,7 +22,7 @@ wk.register({
 		w = {
 			name = "+lsp",
 			f = { "format" },
-			F = { "<cmd>Format<cr>", "Formatter Format" },
+			F = { "<cmd>FormatWrite<cr>", "Formatter Format" },
 			a = { "add worspace folder" },
 			r = { "remove worspace folder" },
 			l = { "list workspace folder" },

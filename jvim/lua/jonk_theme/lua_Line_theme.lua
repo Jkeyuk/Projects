@@ -1,11 +1,10 @@
-local electric_blue = {
+local cappuu = {
 	black        = '#000000',
 	white        = '#f9f9f9',
-	red          = '#fc634f',
-	green        = '#b8bb26',
-	secondary    = '#4ffc9d',
+	red          = '#F38BA8',
+	green        = '#A6E3A1',
 	yellow       = '#e8fc4f',
-	primary      = '#4ee8fc',
+	blue         = '#89B4FA',
 	darkgray     = '#3c3836',
 	lightgray    = '#504945',
 	inactivegray = '#7c6f64',
@@ -14,9 +13,9 @@ local electric_blue = {
 function SetLuaLineCol(colors)
 	return {
 		normal = {
-			a = { bg = colors.primary, fg = colors.black, gui = 'bold' },
+			a = { bg = colors.blue, fg = colors.black, gui = 'bold' },
 			b = { bg = colors.lightgray, fg = colors.white },
-			c = { bg = colors.darkgray, fg = colors.primary }
+			c = { bg = colors.darkgray, fg = colors.blue }
 		},
 		insert = {
 			a = { bg = colors.red, fg = colors.black, gui = 'bold' },
@@ -39,11 +38,11 @@ function SetLuaLineCol(colors)
 			c = { bg = colors.inactivegray, fg = colors.black }
 		},
 		inactive = {
-			a = { bg = colors.darkgray, fg = colors.primary, gui = 'bold' },
-			b = { bg = colors.darkgray, fg = colors.primary },
-			c = { bg = colors.darkgray, fg = colors.primary }
+			a = { bg = colors.darkgray, fg = colors.blue, gui = 'bold' },
+			b = { bg = colors.darkgray, fg = colors.blue },
+			c = { bg = colors.darkgray, fg = colors.blue }
 		}
 	}
 end
 
-require('lualine').setup { options = { theme = SetLuaLineCol(electric_blue) } }
+require('lualine').setup { options = { theme = SetLuaLineCol(cappuu) } }

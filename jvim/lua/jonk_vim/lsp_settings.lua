@@ -8,7 +8,8 @@ require("mason-lspconfig").setup {
 		"tsserver",
 		"eslint",
 		"html",
-		"csharp_ls"
+		"csharp_ls",
+		"rust_analyzer"
 	},
 }
 
@@ -34,7 +35,9 @@ lspconfig.html.setup {
 lspconfig.csharp_ls.setup{
 	capabilities = capabilities
 }
-
+lspconfig.rust_analyzer.setup{
+	capabilities = capabilities
+}
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
