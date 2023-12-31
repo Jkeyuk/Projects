@@ -36,6 +36,9 @@ function ApplyTheme(cols)
 	vim.api.nvim_set_hl(0, "CursorLineNr", {
 		fg = cols.err
 	})
+	vim.api.nvim_set_hl(0, "DiagnosticError", {
+		fg = cols.err
+	})
 end
 
 vim.api.nvim_create_user_command(
