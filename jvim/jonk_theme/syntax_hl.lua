@@ -9,6 +9,17 @@ local cappu = {
 	err = '#fc634f',
 }
 
+local cappu_2 = {
+	comment = '#F38BA8',
+	identifier = '#CDD6F4',
+	func = '#A6E3A1',
+	statement = '#F9E2AF',
+	stringg = '#89B4FA',
+	structure = '#F38BA8',
+	warning = '#e8fc4f',
+	err = '#fc634f',
+}
+
 function SetSyntaxHl(cols)
 	-- Comment
 	vim.api.nvim_set_hl(0, "Comment", {
@@ -52,12 +63,43 @@ function SetSyntaxHl(cols)
 	vim.api.nvim_set_hl(0, "Number", {
 		fg = cols.stringg
 	})
+	-- match paren
+	vim.api.nvim_set_hl(0, "MatchParen", {
+		bg = cols.identifier
+	})
 end
+
+function SetRustHl(cols)
+	SetSyntaxHl(cols);
+	vim.api.nvim_set_hl(0, "Normal", {
+		fg = cols.structure
+	})
+end
+
+vim.api.nvim_create_user_command(
+	'JonkSetRust',
+	function(opts)
+		if opts.fargs[1] == "cap1" then
+			print(opts.fargs)
+			SetRustHl(cappu);
+		end
+		if opts.fargs[1] == "cap2" then
+			print("cap2")
+			SetRustHl(cappu_2);
+		end
+	end, {
+		nargs = 1,
+		complete = function(ArgLead, CmdLine, CursorPos)
+			-- return completion candidates as a list-like table
+			return { "cap1", "cap2", }
+		end,
+	}
+)
 
 vim.api.nvim_create_user_command(
 	'JonkSetSyntaxHllll',
 	function()
-		SetSyntaxHl(cappu);
+		SetSyntaxHl(cappu_2);
 	end,
 	{})
-SetSyntaxHl(cappu);
+SetSyntaxHl(cappu_2);

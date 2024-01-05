@@ -5,7 +5,6 @@ require("jonk_vim.lsp_settings")
 require("jonk_vim.telescope_settings")
 require("jonk_vim.cmp_settings")
 require("jonk_vim.formatter")
-require("jonk_vim.theme_commands")
 require("jonk_vim.which_key_setting")
 
 require("nvim-treesitter.configs").setup {
