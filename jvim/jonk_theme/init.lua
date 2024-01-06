@@ -1,21 +1,22 @@
 require("jonk_theme.lua_Line_theme")
 
-local cap_green = {
-	primary = '#CDD6F4',
-	secondary = '#A6E3A1',
-	warn = '#e8fc4f',
-	err = '#fc634f',
+local cap_colors_p = {
+	black = "#45475A",
+	blue = "#89B4FA",
+	cyan = "#94E2D5",
+	green = "#A6E3A1",
+	magenta = "#F5C2E7",
+	red = "#F38BA8",
+	white = "#CDD6F4",
+	yellow = "#F9E2AF",
 	bg = '#1E1E2E'
 }
 
-
-local electric_blue = {
-	primary = '#4ee8fc',
-	primary_text = '#000000',
-	secondary = '#4ffc9d',
-	warn = '#e8fc4f',
-	err = '#fc634f',
-	bg = '#000000'
+local cap_theme = {
+	primary = cap_colors_p.white,
+	secondary = cap_colors_p.green,
+	err = cap_colors_p.red,
+	bg = cap_colors_p.bg
 }
 
 function ApplyTheme(cols)
@@ -44,8 +45,9 @@ end
 vim.api.nvim_create_user_command(
 	'JonkThemeElectricBlue',
 	function()
-		ApplyTheme(cap_green)
+		ApplyTheme(cap_theme)
 	end,
 	{})
-ApplyTheme(cap_green)
+ApplyTheme(cap_theme)
+
 require("jonk_theme.syntax_hl")

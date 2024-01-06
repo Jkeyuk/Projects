@@ -1,11 +1,11 @@
 print("jonk package loaded")
 require("jonk_vim.editor_settings")
 require("jonk_vim.lazy_settings")
+require("jonk_vim.which_key_setting")
 require("jonk_vim.lsp_settings")
 require("jonk_vim.telescope_settings")
 require("jonk_vim.cmp_settings")
 require("jonk_vim.formatter")
-require("jonk_vim.which_key_setting")
 
 require("nvim-treesitter.configs").setup {
 	ensure_installed = {

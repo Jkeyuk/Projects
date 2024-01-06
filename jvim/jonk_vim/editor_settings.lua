@@ -3,17 +3,20 @@ vim.o.number = true
 vim.o.clipboard = "unnamedplus"
 vim.o.relativenumber = true
 vim.o.termguicolors = true
+
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
 vim.o.tabstop = 4
+vim.o.expandtab = true
+vim.o.smartindent = true
 
 vim.o.cursorline = true
 vim.o.cursorlineopt = 'number'
 
+vim.o.swapfile = false
+vim.o.backup = false
+
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
-

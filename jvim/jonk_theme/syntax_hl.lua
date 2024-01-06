@@ -1,23 +1,34 @@
+local colors_p = {
+	black = "#45475A",
+	blue = "#89B4FA",
+	cyan = "#94E2D5",
+	green = "#A6E3A1",
+	magenta = "#F5C2E7",
+	red = "#F38BA8",
+	white = "#CDD6F4",
+	yellow = "#F9E2AF",
+}
+
 local cappu = {
-	comment = '#F38BA8', -- red
-	identifier = '#89B4FA', -- blue
-	func = '#A6E3A1', -- green
-	statement = '#F9E2AF', -- yellow
-	stringg = '#CDD6F4', -- cappu text
-	structure = '#F38BA8', -- red
-	warning = '#e8fc4f',
-	err = '#fc634f',
+	comment = colors_p.red, -- red
+	identifier = colors_p.blue, -- blue
+	func = colors_p.green, -- green
+	statement = colors_p.yellow, -- yellow
+	stringg = colors_p.white, -- cappu text
+	structure = colors_p.green, -- red
+	warning = colors_p.yellow,
+	err = colors_p.red,
 }
 
 local cappu_2 = {
-	comment = '#F38BA8',
-	identifier = '#CDD6F4',
-	func = '#A6E3A1',
-	statement = '#F9E2AF',
-	stringg = '#89B4FA',
-	structure = '#F38BA8',
-	warning = '#e8fc4f',
-	err = '#fc634f',
+	comment = colors_p.red, -- red
+	identifier = colors_p.white, -- blue
+	func = colors_p.green, -- green
+	statement = colors_p.yellow, -- yellow
+	stringg = colors_p.blue, -- cappu text
+	structure = colors_p.green, -- red
+	warning = colors_p.yellow,
+	err = colors_p.red,
 }
 
 function SetSyntaxHl(cols)
