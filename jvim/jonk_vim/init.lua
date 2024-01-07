@@ -6,6 +6,7 @@ require("jonk_vim.lsp_settings")
 require("jonk_vim.telescope_settings")
 require("jonk_vim.cmp_settings")
 require("jonk_vim.formatter")
+require("jonk_vim.j_hover")
 
 require("nvim-treesitter.configs").setup {
 	ensure_installed = {
