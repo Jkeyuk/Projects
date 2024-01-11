@@ -1,16 +1,19 @@
--- LSP SetUp
+require("neodev").setup({
+    -- add any options here, or leave empty to use the default settings
+})
 
+-- LSP SetUp
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-lspconfig").setup {
-	ensure_installed = {
-		"lua_ls",
-		"tsserver",
-		"eslint",
-		"html",
-		"csharp_ls",
-		"rust_analyzer"
-	},
+    ensure_installed = {
+        "lua_ls",
+        "tsserver",
+        "eslint",
+        "html",
+        "csharp_ls",
+        "rust_analyzer"
+    },
 }
 
 
@@ -22,47 +25,54 @@ lspconfig.eslint.setup {}
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 lspconfig.lua_ls.setup {
-	capabilities = capabilities
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            completion = {
+                callSnippet = "Replace"
+            }
+        }
+    }
 }
 
 lspconfig.tsserver.setup {
-	capabilities = capabilities
+    capabilities = capabilities
 }
 
 lspconfig.html.setup {
-	capabilities = capabilities
+    capabilities = capabilities
 }
-lspconfig.csharp_ls.setup{
-	capabilities = capabilities
+lspconfig.csharp_ls.setup {
+    capabilities = capabilities
 }
-lspconfig.rust_analyzer.setup{
-	capabilities = capabilities
+lspconfig.rust_analyzer.setup {
+    capabilities = capabilities
 }
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
-	group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-	callback = function(ev)
-		-- Enable completion triggered by <c-x><c-o>
-		vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+        -- Enable completion triggered by <c-x><c-o>
+        vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-		-- Buffer local mappings.
-		-- See `:help vim.lsp.*` for documentation on any of the below functions
-		local opts = { buffer = ev.buf }
-		vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-		vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-		vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-		vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-		vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-		vim.keymap.set('n', '<space>wl', function()
-			print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-		end, opts)
-		vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-		vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-		vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-		vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-		vim.keymap.set('n', '<space>wf', function()
-			vim.lsp.buf.format { async = true }
-		end, opts)
-	end,
+        -- Buffer local mappings.
+        -- See `:help vim.lsp.*` for documentation on any of the below functions
+        local opts = { buffer = ev.buf }
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+        vim.keymap.set('n', '<space>wl', function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        end, opts)
+        vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+        vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+        vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        vim.keymap.set('n', '<space>wf', function()
+            vim.lsp.buf.format { async = true }
+        end, opts)
+    end,
 })

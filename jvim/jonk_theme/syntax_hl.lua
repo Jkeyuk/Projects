@@ -7,28 +7,30 @@ local colors_p_cappuc = {
     red = "#F38BA8",
     white = "#CDD6F4",
     yellow = "#F9E2AF",
+    purple = "#ae94e2",
+    orange = "#facf89"
 }
 
 local cappu = {
-    comment = colors_p_cappuc.red,
     identifier = colors_p_cappuc.blue,
     func = colors_p_cappuc.green,
-    statement = colors_p_cappuc.yellow,
-    stringg = colors_p_cappuc.yellow,
-    structure = colors_p_cappuc.red,
+    statement = colors_p_cappuc.orange,
+    structure = colors_p_cappuc.orange,
+    stringg = colors_p_cappuc.red,
+    comment = colors_p_cappuc.red,
     type = colors_p_cappuc.red,
     warning = colors_p_cappuc.yellow,
     err = colors_p_cappuc.red,
 }
 
 local cappu_2 = {
-    comment = colors_p_cappuc.red,
     identifier = colors_p_cappuc.blue,
-    func = colors_p_cappuc.cyan,
-    statement = colors_p_cappuc.yellow,
-    stringg = colors_p_cappuc.white,
-    structure = colors_p_cappuc.yellow,
-    type = colors_p_cappuc.yellow,
+    func = colors_p_cappuc.purple,
+    statement = colors_p_cappuc.green,
+    structure = colors_p_cappuc.green,
+    stringg = colors_p_cappuc.orange,
+    comment = colors_p_cappuc.orange,
+    type = colors_p_cappuc.orange,
     warning = colors_p_cappuc.yellow,
     err = colors_p_cappuc.red,
 }
@@ -82,7 +84,13 @@ function SetSyntaxHl(cols)
     vim.api.nvim_set_hl(0, "String", {
         fg = cols.stringg
     })
+    vim.api.nvim_set_hl(0, "Boolean", {
+        fg = cols.stringg
+    })
     vim.api.nvim_set_hl(0, "Number", {
+        fg = cols.stringg
+    })
+    vim.api.nvim_set_hl(0, "Character", {
         fg = cols.stringg
     })
 
@@ -100,6 +108,9 @@ function SetRustHl(cols)
     SetSyntaxHl(cols);
     vim.api.nvim_set_hl(0, "Normal", {
         fg = cols.structure
+    })
+    vim.api.nvim_set_hl(0, "@lsp.type.struct", {
+        fg = cols.type
     })
 end
 
@@ -121,10 +132,23 @@ vim.api.nvim_create_user_command(
     }
 )
 
+
 vim.api.nvim_create_user_command(
-    'JonkSetSyntaxHllll',
-    function()
-        SetSyntaxHl(cappu);
-    end,
-    {})
-SetSyntaxHl(cappu);
+    'JonkSetSyntaxHl',
+    function(opts)
+        if opts.fargs[1] == "cap1" then
+            SetSyntaxHl(cappu);
+        end
+        if opts.fargs[1] == "cap2" then
+            SetSyntaxHl(cappu_2);
+        end
+    end, {
+        nargs = 1,
+        complete = function(ArgLead, CmdLine, CursorPos)
+            -- return completion candidates as a list-like table
+            return { "cap1", "cap2", }
+        end,
+    }
+)
+
+SetRustHl(cappu_2);
