@@ -12,7 +12,7 @@ require("mason-lspconfig").setup {
         "eslint",
         "html",
         "csharp_ls",
-        "rust_analyzer"
+        "rust_analyzer",
     },
 }
 
